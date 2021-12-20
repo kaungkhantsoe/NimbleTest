@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">NimbleTest</string>
+
+    <string name="transition_name_logo">logo</string>
+
+    <string name="txt_login_email">Email</string>
+    <string name="txt_login_forgot">Forgot?</string>
+    <string name="txt_login_password">Password</string>
+    <string name="txt_login_log_in">Log in</string>
 </resources>
