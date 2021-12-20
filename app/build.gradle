@@ -1,6 +1,8 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
 }
 
 android {
@@ -11,7 +13,7 @@ android {
         minSdk 21
         targetSdk 31
         versionCode 1
-        versionName "1.0"
+        versionName "0.0.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -29,15 +31,123 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    buildFeatures {
+        viewBinding(true)
+    }
+
+    sourceSets {
+        androidTest {
+            java.srcDirs += "src/sharedTest/java"
+        }
+        test {
+            java.srcDirs += "src/sharedTest/java"
+        }
+    }
+
+    packagingOptions {
+        resources.excludes.add("META-INF/*")
+    }
+
+    // https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-debug/index.html
+    packagingOptions {
+        // for JNA and JNA-platform
+        exclude "META-INF/AL2.0"
+        exclude "META-INF/LGPL2.1"
+        // for byte-buddy
+        exclude "META-INF/licenses/ASM"
+        pickFirst "win32-x86-64/attach_hotspot_windows.dll"
+        pickFirst "win32-x86/attach_hotspot_windows.dll"
+    }
+
+    configurations {
+        androidTestImplementation {
+            // https://github.com/mockk/mockk/issues/722
+            exclude group: 'io.mockk', module: 'mockk-agent-jvm'
+        }
+    }
+
+    flavorDimensions "default"
+    productFlavors {
+        dev {
+            buildConfigField("String", "BASE_URL", "\"https://survey-api.nimblehq.co/\"")
+            buildConfigField("String", "CLIENT_ID", "\"6GbE8dhoz519l2N_F99StqoOs6Tcmm1rXgda4q__rIw\"")
+            buildConfigField("String", "CLIENT_SECRET", "\"_ayfIm7BeUAhx2W1OUqi20fwO3uNxfo1QstyKlFCgHw\"")
+        }
+        prod {
+            buildConfigField("String", "BASE_URL", "\"https://survey-api.nimblehq.co/\"")
+            buildConfigField("String", "CLIENT_ID", "\"6GbE8dhoz519l2N_F99StqoOs6Tcmm1rXgda4q__rIw\"")
+            buildConfigField("String", "CLIENT_SECRET", "\"_ayfIm7BeUAhx2W1OUqi20fwO3uNxfo1QstyKlFCgHw\"")
+        }
+    }
 }
 
 dependencies {
 
-    implementation 'androidx.core:core-ktx:1.7.0'
-    implementation 'androidx.appcompat:appcompat:1.4.0'
-    implementation 'com.google.android.material:material:1.4.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
+    implementation "androidx.core:core-ktx:$core_version"
+    implementation "androidx.appcompat:appcompat:$appcompat_version"
+    implementation "com.google.android.material:material:$material_version"
+    implementation "androidx.constraintlayout:constraintlayout:$constraint_version"
+    implementation "androidx.core:core-splashscreen:$splash_screen_version"
+
+    // Lifecycle components
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version")
+    implementation("androidx.lifecycle:lifecycle-extensions:$lifecycle_extension_version")
+
+    //Dagger - Hilt
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    kapt "com.google.dagger:hilt-compiler:$hilt_version"
+
+    // Timber
+    implementation("com.jakewharton.timber:timber:$timber_version")
+
+    // Klaxon serialize
+    implementation 'com.beust:klaxon:5.5'
+
+    // Retrofit
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+    // Retrofit mock
+    implementation "com.squareup.retrofit2:retrofit-mock:$retrofit_version"
+
+    // Okhttp
+    implementation("com.squareup.okhttp3:okhttp:$okhttp_version")
+    implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
+
+    // Facebook shimmer
+    implementation "com.facebook.shimmer:shimmer:$shimmer_version"
+
+    //
+    // --------------------------- Unit Test ---------------------------
+    //
+
     testImplementation 'junit:junit:4.+'
+
+    // Google Truth
+    testImplementation "com.google.truth:truth:$google_truth_version"
+
+    //For runBlockingTest, CoroutineDispatcher etc.
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_test_version"
+    //For InstantTaskExecutorRule
+    testImplementation "androidx.arch.core:core-testing:$core_testing_version"
+
+    // Mockito Kotlin
+    testImplementation "org.mockito.kotlin:mockito-kotlin:$mockito_kotlin_version"
+    //How to mock a final class with mockito
+    testImplementation "org.mockito:mockito-inline:$mockito_inline_version"
+
+    // Json for unit test
+    testImplementation "org.json:json:$json_version"
+
+    // Mockk
+    testImplementation "io.mockk:mockk-android:1.12.1"
+    testImplementation "io.mockk:mockk-agent-jvm:1.12.1"
+
+    //
+    // --------------------------- Android Test ---------------------------
+    //
+
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+
 }
