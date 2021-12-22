@@ -1,14 +1,14 @@
 package com.kks.nimbletest
 
-import com.kks.nimbletest.data.network.reponse.BaseResponse
-import com.kks.nimbletest.data.network.reponse.LoginAttributesResponse
-import com.kks.nimbletest.data.network.reponse.LoginResponse
+import com.kks.nimbletest.data.network.reponse.*
 
 /**
  * Created by kaungkhantsoe at 20/12/2021
  */
 
 object TestConstants {
+
+    // Login Success
     val loginAttributesResponse = LoginAttributesResponse(
         "",
         "",
@@ -25,4 +25,14 @@ object TestConstants {
         BaseResponse(
             loginResponse
         )
+
+    // Survey Success
+    val surveyResponse = listOf(SurveyResponse(null,null,null,null))
+    val metaResponse = MetaResponse(1,1,1,1)
+    val baseSurveyResponse = BaseResponse(obj = surveyResponse, meta = metaResponse)
+
+
+    // User Success
+    val userResponse = UserResponse("","",null)
+    val baseUserResponse = BaseResponse(obj = userResponse)
 }

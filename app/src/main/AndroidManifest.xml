@@ -26,6 +26,11 @@
         <activity
             android:screenOrientation="portrait"
             android:name=".ui.login.LoginActivity"/>
+
+        <activity
+            android:screenOrientation="portrait"
+            android:name=".ui.home.HomeActivity"/>
+        <activity android:name=".ui.detail.SurveyDetailActivity" />
     </application>
 
 </manifest>

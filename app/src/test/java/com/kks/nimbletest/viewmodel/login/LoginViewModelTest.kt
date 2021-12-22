@@ -1,4 +1,4 @@
-package com.kks.nimbletest.viewmodel
+package com.kks.nimbletest.viewmodel.login
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.google.common.truth.Truth.assertThat
@@ -29,6 +29,7 @@ class LoginViewModelTest {
     @Before
     fun setup() {
         fakeLoginRepo = FakeLoginRepository()
+        sut = LoginViewModel(fakeLoginRepo, testCoroutineDispatcher)
     }
 
     @After
@@ -38,8 +39,6 @@ class LoginViewModelTest {
 
     @Test
     fun `login with invalid email or password, return invalid_grant error`() {
-        sut = LoginViewModel(fakeLoginRepo, testCoroutineDispatcher)
-
         // Given
         val email = ""
         val password = ""
@@ -51,15 +50,11 @@ class LoginViewModelTest {
 
         // Then
         val result =  sut.loginLiveData.getOrAwaitValue()
-        if (result is ResourceState.GenericError)
-            assertThat(result.error).isEqualTo("invalid_grant")
-        else throw Exception("Should return error. But returning $result")
+        assertThat (result).isEqualTo(ResourceState.GenericError(400,"invalid_grant"))
     }
 
     @Test
     fun `login with invalid client_id or client_secret, return invalid_client error`() {
-        sut = LoginViewModel(fakeLoginRepo, testCoroutineDispatcher)
-
         // Given
         val email = "email"
         val password = "password"
@@ -71,15 +66,11 @@ class LoginViewModelTest {
 
         // Then
         val result =  sut.loginLiveData.getOrAwaitValue()
-        if (result is ResourceState.GenericError)
-            assertThat(result.error).isEqualTo("invalid_client")
-        else throw Exception("Should return error. But returning $result")
+        assertThat (result).isEqualTo(ResourceState.GenericError(403,"invalid_client"))
     }
 
     @Test
     fun `login with valid data, return success`() {
-        sut = LoginViewModel(fakeLoginRepo, testCoroutineDispatcher)
-
         // Given
         val email = "email"
         val password = "password"
@@ -91,8 +82,6 @@ class LoginViewModelTest {
 
         // Then
         val result =  sut.loginLiveData.getOrAwaitValue()
-        if (result is ResourceState.Success)
-            assertThat(result.successData).isEqualTo(TestConstants.loginResponse)
-        else throw Exception("Should return Success. But returning $result")
+        assertThat (result).isEqualTo(ResourceState.Success(TestConstants.loginResponse))
     }
 }

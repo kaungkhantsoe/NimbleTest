@@ -34,11 +34,6 @@ abstract class BaseViewBindingActivity<VB : ViewBinding> : AppCompatActivity() {
 
     abstract fun setup()
 
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
-    }
-
     protected open fun setupToolbar(toolbar: Toolbar, isChild: Boolean) {
 
         if (isChild) {

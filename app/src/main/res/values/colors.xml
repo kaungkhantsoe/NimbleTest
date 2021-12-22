@@ -9,7 +9,11 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="transparent_white_18">#2EFFFFFF</color>
+    <color name="transparent_white_20">#33FFFFFF</color>
+    <color name="transparent_black_18">#2E000000</color>
+    <color name="transparent_black_10">#1A000000</color>
     <color name="gray">#7E7C79</color>
     <color name="text_primary">#15151A</color>
+    <color name="shimmer_color">#C2C2C2</color>
 
 </resources>

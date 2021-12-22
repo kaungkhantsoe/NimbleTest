@@ -1,4 +1,4 @@
-package com.kks.nimbletest.viewmodel
+package com.kks.nimbletest.viewmodel.login
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

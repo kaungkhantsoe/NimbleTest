@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/black"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/vp_surveys"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_transparent_black" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/space_54dp"
+            android:gravity="bottom"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_21dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <com.tbuonomo.viewpagerdotsindicator.DotsIndicator
+                    android:id="@+id/dots_indicator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:dotsColor="@color/transparent_white_20"
+                    app:dotsCornerRadius="8dp"
+                    app:dotsSize="@dimen/space_8dp"
+                    app:dotsSpacing="4dp"
+                    app:dotsWidthFactor="2.5"
+                    app:progressMode="false"
+                    app:selectedDotColor="@color/white" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_24dp"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_size_28"
+                    android:textStyle="bold"
+                    tools:text="Working from home Check-In" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_16dp"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_size_17"
+                    tools:text="We would like to know how you feel about our work from home We would like to know how you feel about our work from home" />
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/ib_action"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/space_21dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_action" />
+        </LinearLayout>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_date"
+            android:textAllCaps="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/space_20dp"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_13"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Monday, JUNE 15" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_today"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_20dp"
+            android:text="@string/txt_today"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_34"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_date" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="@dimen/space_36dp"
+            android:layout_height="@dimen/space_36dp"
+            android:layout_marginEnd="@dimen/space_20dp"
+            app:cardCornerRadius="@dimen/space_18dp"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_today"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_today">
+
+            <ImageView
+                android:id="@+id/iv_user"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmer_view"
+        app:shimmer_auto_start="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/space_54dp"
+                android:gravity="bottom"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/space_21dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <View
+                        android:layout_width="80dp"
+                        android:layout_height="15dp"
+                        android:background="@drawable/shimmer_view"/>
+
+                    <View
+                        android:layout_width="160dp"
+                        android:layout_height="30dp"
+                        android:layout_marginTop="@dimen/space_24dp"
+                        android:background="@drawable/shimmer_view"/>
+
+                    <View
+                        android:layout_width="130dp"
+                        android:layout_height="30dp"
+                        android:layout_marginTop="@dimen/space_8dp"
+                        android:background="@drawable/shimmer_view"/>
+
+                    <View
+                        android:layout_width="180dp"
+                        android:layout_height="@dimen/space_20dp"
+                        android:layout_marginTop="@dimen/space_16dp"
+                        android:background="@drawable/shimmer_view" />
+
+                    <View
+                        android:layout_width="160dp"
+                        android:layout_height="@dimen/space_20dp"
+                        android:layout_marginTop="@dimen/space_8dp"
+                        android:background="@drawable/shimmer_view" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="@dimen/space_50dp"
+                    android:layout_height="@dimen/space_50dp"
+                    android:layout_marginEnd="@dimen/space_21dp"
+                    android:background="@drawable/shimmer_view"/>
+            </LinearLayout>
+
+            <View
+                android:id="@+id/view_date"
+                android:layout_width="120dp"
+                android:layout_height="20dp"
+                android:layout_margin="@dimen/space_20dp"
+                android:background="@drawable/shimmer_view"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <View
+                android:id="@+id/view_today"
+                android:layout_width="100dp"
+                android:layout_height="20dp"
+                android:layout_marginTop="@dimen/space_8dp"
+                android:layout_marginStart="@dimen/space_20dp"
+                android:background="@drawable/shimmer_view"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/view_date" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="@dimen/space_36dp"
+                android:layout_height="@dimen/space_36dp"
+                android:layout_marginEnd="@dimen/space_20dp"
+                app:cardCornerRadius="@dimen/space_18dp"
+                app:layout_constraintBottom_toBottomOf="@+id/view_today"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/view_today">
+
+                <View
+                    android:background="@color/shimmer_color"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

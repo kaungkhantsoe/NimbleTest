@@ -1,8 +1,10 @@
 package com.kks.nimbletest
 
+import com.kks.nimbletest.repo.home.HomeRepoImplTest
 import com.kks.nimbletest.repo.login.LoginRepoImplTest
 import com.kks.nimbletest.repo.token.TokenRepoImplTest
-import com.kks.nimbletest.viewmodel.LoginViewModelTest
+import com.kks.nimbletest.viewmodel.home.HomeViewModelTest
+import com.kks.nimbletest.viewmodel.login.LoginViewModelTest
 import org.junit.runner.RunWith
 import org.junit.runners.Suite
 
@@ -14,7 +16,10 @@ import org.junit.runners.Suite
 @RunWith(Suite::class)
 @Suite.SuiteClasses(
     LoginRepoImplTest::class,
+    TokenRepoImplTest::class,
+    HomeRepoImplTest::class,
+
     LoginViewModelTest::class,
-    TokenRepoImplTest::class
+    HomeViewModelTest::class,
 )
 class NimbleUnitTestSuite

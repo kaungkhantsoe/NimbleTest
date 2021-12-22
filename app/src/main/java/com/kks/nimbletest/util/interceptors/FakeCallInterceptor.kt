@@ -42,7 +42,7 @@ class FakeCallInterceptor: Interceptor {
                 .body(
                     responseString.toByteArray().toResponseBody("application/json".toMediaTypeOrNull())
                 )
-                .addHeader("content-type", "application/json")
+                .header("content-type", "application/json")
                 .build()
         } else {
             //just to be on safe side.
