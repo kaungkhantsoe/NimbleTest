@@ -9,4 +9,6 @@
     <string name="txt_login_log_in">Log in</string>
     <string name="txt_today">Today</string>
     <string name="txt_session_is_expired">Your session is expired.</string>
+    <string name="txt_enter_your_email_to_receive_instructions">Enter your email to receive instructions for resetting your password.</string>
+    <string name="txt_reset">Reset</string>
 </resources>

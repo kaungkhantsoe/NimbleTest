@@ -12,4 +12,5 @@ object AppConstants {
 
     const val error_email_empty = "Email cannot be empty"
     const val error_password_empty = "Password cannot be empty"
+    const val success = "success"
 }

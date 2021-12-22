@@ -9,6 +9,7 @@ import com.kks.nimbletest.constants.PrefConstants
 import com.kks.nimbletest.data.network.ResourceState
 import com.kks.nimbletest.databinding.ActivityLoginBinding
 import com.kks.nimbletest.ui.base.BaseViewBindingActivity
+import com.kks.nimbletest.ui.forget.ForgetPasswordActivity
 import com.kks.nimbletest.ui.home.HomeActivity
 import com.kks.nimbletest.util.PreferenceManager
 import com.kks.nimbletest.util.extensions.hideKeyboard
@@ -40,6 +41,11 @@ class LoginActivity : BaseViewBindingActivity<ActivityLoginBinding>() {
             hideKeyboard()
             viewModel.login(binding.etEmail.text.toString(), binding.etPassword.text.toString())
         }
+
+        binding.btnForget.setOnClickListener {
+            hideKeyboard()
+            startActivity(Intent(this@LoginActivity,ForgetPasswordActivity::class.java))
+        }
     }
 
     private fun observeLogin() {
@@ -60,6 +66,7 @@ class LoginActivity : BaseViewBindingActivity<ActivityLoginBinding>() {
                 }
                 else -> {
                     // do nothing
+                    binding.btnLogIn.isEnabled = true
                 }
             }
         }

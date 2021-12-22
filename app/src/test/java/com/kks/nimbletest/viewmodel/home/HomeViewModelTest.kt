@@ -7,12 +7,14 @@ import com.kks.nimbletest.data.network.ResourceState
 import com.kks.nimbletest.fake_repo.FakeHomeRepository
 import com.kks.nimbletest.repo.home.HomeRepo
 import com.kks.nimbletest.util.getOrAwaitValue
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
+@ExperimentalCoroutinesApi
 class HomeViewModelTest {
 
     @get:Rule
