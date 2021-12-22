@@ -1,6 +1,8 @@
 package com.kks.nimbletest.di
 
 import com.kks.nimbletest.data.network.ApiInterface
+import com.kks.nimbletest.repo.forget.ForgetPasswordRepo
+import com.kks.nimbletest.repo.forget.ForgetPasswordRepoImpl
 import com.kks.nimbletest.repo.home.HomeRepo
 import com.kks.nimbletest.repo.home.HomeRepoImpl
 import com.kks.nimbletest.repo.login.LoginRepo
@@ -32,5 +34,11 @@ object ViewModelModule {
         apiInterface: ApiInterface
     ): HomeRepo =
         HomeRepoImpl(apiInterface)
+
+    @Provides
+    fun provideForgetPasswordRepoImpl(
+        apiInterface: ApiInterface
+    ): ForgetPasswordRepo =
+        ForgetPasswordRepoImpl(apiInterface,CustomKeyGenerator())
 
 }

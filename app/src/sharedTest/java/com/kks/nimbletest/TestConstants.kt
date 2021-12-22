@@ -28,11 +28,15 @@ object TestConstants {
 
     // Survey Success
     val surveyResponse = listOf(SurveyResponse(null,null,null,null))
-    val metaResponse = MetaResponse(1,1,1,1)
+    val metaResponse = MetaResponse(1,1,1,1,"")
     val baseSurveyResponse = BaseResponse(obj = surveyResponse, meta = metaResponse)
 
 
-    // User Success
+    // User Detail Success
     val userResponse = UserResponse("","",null)
     val baseUserResponse = BaseResponse(obj = userResponse)
+
+    // Forget Password Success
+    val forgetNull: String? = null
+    val baseForgetPasswordResponse = BaseResponse(obj = forgetNull, meta = MetaResponse(1,1,1,1,"Success"))
 }

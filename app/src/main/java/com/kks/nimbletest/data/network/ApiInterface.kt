@@ -4,6 +4,7 @@ import com.kks.nimbletest.data.network.reponse.BaseResponse
 import com.kks.nimbletest.data.network.reponse.LoginResponse
 import com.kks.nimbletest.data.network.reponse.SurveyResponse
 import com.kks.nimbletest.data.network.reponse.UserResponse
+import com.kks.nimbletest.data.network.request.ForgetPasswordRequest
 import com.kks.nimbletest.data.network.request.LoginRequest
 import com.kks.nimbletest.data.network.request.RefreshTokenRequest
 import retrofit2.Call
@@ -33,5 +34,10 @@ interface ApiInterface {
 
     @GET("api/v1/me")
     fun getUserDetail(): Call<BaseResponse<UserResponse>>
+
+    @POST("api/v1/passwords")
+    fun sendForgetPasswordMail(
+        @Body forgetPasswordRequest: ForgetPasswordRequest
+    ): Call<BaseResponse<String?>>
 
 }

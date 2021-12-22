@@ -8,5 +8,6 @@ data class MetaResponse(
     val page: Int?,
     val pages: Int?,
     val page_size: Int?,
-    val records: Int?
+    val records: Int?,
+    val message: String?
 )
