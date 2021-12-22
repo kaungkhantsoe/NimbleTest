@@ -3,8 +3,11 @@ package com.kks.nimbletest.di
 import android.content.Context
 import com.kks.nimbletest.BuildConfig
 import com.kks.nimbletest.data.network.ApiInterface
+import com.kks.nimbletest.repo.token.TokenRepo
 import com.kks.nimbletest.repo.token.TokenRepoImpl
+import com.kks.nimbletest.util.CustomKeyGenerator
 import com.kks.nimbletest.util.PreferenceManager
+import com.kks.nimbletest.util.interceptors.CustomAccessTokenInterceptor
 import com.kks.nimbletest.util.interceptors.TokenAuthenticator
 import dagger.Module
 import dagger.Provides
@@ -16,6 +19,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
+import javax.inject.Singleton
 
 /**
  * Created by kaungkhantsoe at 19/12/2021
@@ -25,10 +29,12 @@ import java.util.concurrent.TimeUnit
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
+    @Singleton
     @Provides
     fun providePreferenceManager(@ApplicationContext appContext: Context): PreferenceManager =
         PreferenceManager(appContext)
 
+    @Singleton
     @Provides
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder().baseUrl(BuildConfig.BASE_URL)
@@ -37,24 +43,27 @@ object NetworkModule {
             .build()
     }
 
+    @Singleton
     @Provides
     fun provideOkHttpClient(
-        /*accessTokenInterceptor: AccessTokenInterceptor,*/
+        @ApplicationContext appContext: Context,
         loggingInterceptor: HttpLoggingInterceptor
     ): OkHttpClient {
         return OkHttpClient().newBuilder()
             .connectTimeout(15, TimeUnit.SECONDS)
             .readTimeout(15, TimeUnit.SECONDS)
-            .authenticator(TokenAuthenticator()) /* Refresh token interceptor */
+            .addInterceptor(CustomAccessTokenInterceptor(appContext))
+            .authenticator(TokenAuthenticator(appContext)) /* Refresh token interceptor */
             .addInterceptor(loggingInterceptor)
-            /*.addInterceptor(accessTokenInterceptor)*/
             .build()
     }
 
+    @Singleton
     @Provides
     fun provideApiService(retrofit: Retrofit): ApiInterface =
         retrofit.create(ApiInterface::class.java)
 
+    @Singleton
     @Provides
     fun provideLoggingInterceptor(): HttpLoggingInterceptor {
         return if (BuildConfig.DEBUG)
@@ -63,12 +72,12 @@ object NetworkModule {
             HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.NONE)
     }
 
-
+    @Singleton
     @Provides
     fun provideTokenRepoImpl(
         apiInterface: ApiInterface,
         preferenceManager: PreferenceManager
     ): TokenRepoImpl =
-        TokenRepoImpl(apiInterface, preferenceManager)
+        TokenRepoImpl(apiInterface, preferenceManager, CustomKeyGenerator())
 
 }

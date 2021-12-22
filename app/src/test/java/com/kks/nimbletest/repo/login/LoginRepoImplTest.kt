@@ -1,6 +1,7 @@
 package com.kks.nimbletest.repo.login
 
 import com.google.common.truth.Truth.assertThat
+import com.kks.nimbletest.FakeCustomKeyGenerator
 import com.kks.nimbletest.util.MockResponseFileReader
 import com.kks.nimbletest.util.MockitoHelper.anyObject
 import com.kks.nimbletest.TestConstants
@@ -29,14 +30,11 @@ class LoginRepoImplTest {
 
     private lateinit var sut: LoginRepoImpl
 
-//    @get: Rule
-//    var instantTaskExecutorRule = InstantTaskExecutorRule()
-
     @Before
     fun setup() {
         preferenceManager = mock(PreferenceManager::class.java)
         apiInterface = mock(ApiInterface::class.java)
-        sut = LoginRepoImpl(apiInterface, preferenceManager)
+        sut = LoginRepoImpl(apiInterface, preferenceManager, FakeCustomKeyGenerator())
     }
 
     @After
@@ -94,7 +92,7 @@ class LoginRepoImplTest {
             val secondResult = sut.loginWithEmailAndPassword(email, password).drop(1).first()
 
             // Then
-            assertThat((secondResult as ResourceState.GenericError).error).isEqualTo("invalid_grant")
+            assertThat(secondResult).isEqualTo(ResourceState.GenericError(400,"invalid_grant"))
         }
     }
 
@@ -113,7 +111,7 @@ class LoginRepoImplTest {
             val secondResult = sut.loginWithEmailAndPassword(email, password).drop(1).first()
 
             // Then
-            assertThat((secondResult as ResourceState.GenericError).error).isEqualTo("invalid_grant")
+            assertThat(secondResult).isEqualTo(ResourceState.GenericError(400,"invalid_grant"))
 
         }
     }
@@ -133,7 +131,7 @@ class LoginRepoImplTest {
             val secondResult = sut.loginWithEmailAndPassword(email, password).drop(1).first()
 
             // Then
-            assertThat((secondResult as ResourceState.GenericError).error).isEqualTo("invalid_client")
+            assertThat(secondResult).isEqualTo(ResourceState.GenericError(403,"invalid_client"))
         }
     }
 

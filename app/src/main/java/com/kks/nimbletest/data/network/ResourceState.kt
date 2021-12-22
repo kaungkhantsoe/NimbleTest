@@ -13,4 +13,6 @@ sealed class ResourceState<out T> {
     data class GenericError(val code: Int? = null, val error: String? = null) :
         ResourceState<Nothing>()
     object NetworkError : ResourceState<Nothing>()
+    object ProtocolError : ResourceState<Nothing>()
+
 }

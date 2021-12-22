@@ -70,15 +70,21 @@ android {
     productFlavors {
         dev {
             buildConfigField("String", "BASE_URL", "\"https://survey-api.nimblehq.co/\"")
-            buildConfigField("String", "CLIENT_ID", "\"6GbE8dhoz519l2N_F99StqoOs6Tcmm1rXgda4q__rIw\"")
-            buildConfigField("String", "CLIENT_SECRET", "\"_ayfIm7BeUAhx2W1OUqi20fwO3uNxfo1QstyKlFCgHw\"")
         }
         prod {
             buildConfigField("String", "BASE_URL", "\"https://survey-api.nimblehq.co/\"")
-            buildConfigField("String", "CLIENT_ID", "\"6GbE8dhoz519l2N_F99StqoOs6Tcmm1rXgda4q__rIw\"")
-            buildConfigField("String", "CLIENT_SECRET", "\"_ayfIm7BeUAhx2W1OUqi20fwO3uNxfo1QstyKlFCgHw\"")
         }
     }
+
+    externalNativeBuild {
+        cmake {
+            path "src/main/cpp/CMakeLists.txt"
+            version "3.10.2"
+        }
+    }
+
+    ndkVersion '21.3.6528147'
+
 }
 
 dependencies {
@@ -102,7 +108,11 @@ dependencies {
     implementation("com.jakewharton.timber:timber:$timber_version")
 
     // Klaxon serialize
-    implementation 'com.beust:klaxon:5.5'
+    implementation "com.beust:klaxon:$klaxon_version"
+
+    // Glide
+    implementation "com.github.bumptech.glide:glide:$glide_version"
+    kapt "com.github.bumptech.glide:compiler:$glide_version"
 
     // Retrofit
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
@@ -112,10 +122,19 @@ dependencies {
 
     // Okhttp
     implementation("com.squareup.okhttp3:okhttp:$okhttp_version")
-    implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_logging_version"
 
     // Facebook shimmer
     implementation "com.facebook.shimmer:shimmer:$shimmer_version"
+
+    // Dot indicator
+    implementation "com.tbuonomo:dotsindicator:$dotsindicator_version"
+
+    // Loading spin
+    implementation "com.github.ybq:Android-SpinKit:$spinkit_version"
+
+    // Swipe refresh
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:$swipe_refresh_version")
 
     //
     // --------------------------- Unit Test ---------------------------
@@ -140,8 +159,8 @@ dependencies {
     testImplementation "org.json:json:$json_version"
 
     // Mockk
-    testImplementation "io.mockk:mockk-android:1.12.1"
-    testImplementation "io.mockk:mockk-agent-jvm:1.12.1"
+    testImplementation "io.mockk:mockk-android:$mockk_version"
+    testImplementation "io.mockk:mockk-agent-jvm:$mockk_version"
 
     //
     // --------------------------- Android Test ---------------------------

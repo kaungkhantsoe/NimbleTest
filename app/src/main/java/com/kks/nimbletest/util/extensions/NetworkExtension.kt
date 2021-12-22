@@ -8,6 +8,7 @@ import kotlinx.coroutines.withTimeout
 import org.json.JSONObject
 import retrofit2.HttpException
 import java.io.IOException
+import java.net.ProtocolException
 import java.net.UnknownHostException
 
 /**
@@ -25,6 +26,7 @@ suspend fun <T> safeApiCall(
             }
         } catch (throwable: Throwable) {
             when (throwable) {
+                is ProtocolException -> ResourceState.ProtocolError
                 is IOException -> ResourceState.NetworkError
                 is UnknownHostException -> ResourceState.NetworkError
                 is TimeoutCancellationException -> ResourceState.NetworkError

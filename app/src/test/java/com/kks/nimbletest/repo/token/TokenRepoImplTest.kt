@@ -1,6 +1,7 @@
 package com.kks.nimbletest.repo.token
 
 import com.google.common.truth.Truth.assertThat
+import com.kks.nimbletest.FakeCustomKeyGenerator
 import com.kks.nimbletest.util.MockResponseFileReader
 import com.kks.nimbletest.TestConstants
 import com.kks.nimbletest.data.network.ApiInterface
@@ -31,7 +32,7 @@ class TokenRepoImplTest {
     fun setup() {
         apiInterface = mockk()
         preferenceManager = mockk()
-        sut = TokenRepoImpl(apiInterface, preferenceManager)
+        sut = TokenRepoImpl(apiInterface, preferenceManager, FakeCustomKeyGenerator())
     }
 
     @After
@@ -101,6 +102,7 @@ class TokenRepoImplTest {
 
             every {
                 preferenceManager.setStringData(any(), any())
+                preferenceManager.setBooleanData(any(), any())
             } returns Unit
 
             val refreshToken = "validRefreshToken"
@@ -109,7 +111,7 @@ class TokenRepoImplTest {
             val result = sut.refreshToken(refreshToken).take(1).first()
 
             // Then
-            // Verify mock function is not called
+            // Verify mock function is called
             assertThat(result is ResourceState.Success).isTrue()
             verify { preferenceManager.setStringData(any(), any()) }
         }

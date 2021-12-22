@@ -10,6 +10,7 @@
         android:scaleType="centerCrop"
         android:src="@drawable/ic_overlay" />
 
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -29,18 +30,29 @@
                 android:src="@drawable/ic_logo_white"
                 android:transitionName="@string/transition_name_logo" />
 
+            <com.github.ybq.android.spinkit.SpinKitView
+                android:id="@+id/spin_kit"
+                style="@style/SpinKitView.FadingCircle"
+                android:layout_width="@dimen/space_50dp"
+                android:layout_height="@dimen/space_50dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="17dp"
+                android:visibility="invisible"
+                app:SpinKit_Color="@android:color/tab_indicator_text" />
+
             <EditText
                 android:id="@+id/et_email"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/space_56dp"
                 android:layout_marginHorizontal="@dimen/space_24dp"
-                android:layout_marginTop="@dimen/space_117dp"
+                android:layout_marginTop="@dimen/space_50dp"
                 android:background="@drawable/bg_transparent_rounded_rectangle"
                 android:hint="@string/txt_login_email"
                 android:inputType="textEmailAddress"
                 android:lines="1"
                 android:orientation="horizontal"
                 android:paddingHorizontal="@dimen/space_12dp"
+                android:textColor="@color/white"
                 android:textColorHint="@color/gray" />
 
             <LinearLayout
@@ -53,6 +65,7 @@
 
                 <EditText
                     android:id="@+id/et_password"
+                    android:importantForAutofill="no"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -61,6 +74,7 @@
                     android:inputType="textPassword"
                     android:lines="1"
                     android:paddingHorizontal="@dimen/space_12dp"
+                    android:textColor="@color/white"
                     android:textColorHint="@color/gray" />
 
                 <com.google.android.material.button.MaterialButton
