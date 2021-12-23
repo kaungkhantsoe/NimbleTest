@@ -2,19 +2,25 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/black"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/black">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/vp_surveys"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_refresh"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent">
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/vp_surveys"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <View
             android:layout_width="match_parent"
@@ -35,17 +41,17 @@
                 android:layout_weight="1"
                 android:orientation="vertical">
 
-                <com.tbuonomo.viewpagerdotsindicator.DotsIndicator
+                <com.rd.PageIndicatorView2
                     android:id="@+id/dots_indicator"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:dotsColor="@color/transparent_white_20"
-                    app:dotsCornerRadius="8dp"
-                    app:dotsSize="@dimen/space_8dp"
-                    app:dotsSpacing="4dp"
-                    app:dotsWidthFactor="2.5"
-                    app:progressMode="false"
-                    app:selectedDotColor="@color/white" />
+                    app:piv_animationType="slide"
+                    app:piv_dynamicCount="true"
+                    app:piv_interactiveAnimation="true"
+                    app:piv_radius="4dp"
+                    app:piv_selectedColor="@color/white"
+                    app:piv_unselectedColor="@color/transparent_white_20"
+                    app:piv_viewPager="@id/vp_surveys" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tv_title"
@@ -80,10 +86,10 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_date"
-            android:textAllCaps="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/space_20dp"
+            android:textAllCaps="true"
             android:textColor="@color/white"
             android:textSize="@dimen/text_size_13"
             android:textStyle="bold"
@@ -119,13 +125,49 @@
 
         </com.google.android.material.card.MaterialCardView>
 
+        <LinearLayout
+            android:id="@+id/ll_error"
+            android:visibility="gone"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/space_50dp"
+            android:background="@color/black"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_error"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/space_16dp"
+                android:layout_marginTop="@dimen/space_16dp"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_17" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_retry"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_16dp"
+                android:layout_marginBottom="@dimen/space_16dp"
+                android:text="@string/txt_retry"
+                android:textAllCaps="false"
+                android:textColor="@color/teal_200"/>
+        </LinearLayout>
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/shimmer_view"
-        app:shimmer_auto_start="true"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:shimmer_auto_start="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -148,19 +190,19 @@
                     <View
                         android:layout_width="80dp"
                         android:layout_height="15dp"
-                        android:background="@drawable/shimmer_view"/>
+                        android:background="@drawable/shimmer_view" />
 
                     <View
                         android:layout_width="160dp"
                         android:layout_height="30dp"
                         android:layout_marginTop="@dimen/space_24dp"
-                        android:background="@drawable/shimmer_view"/>
+                        android:background="@drawable/shimmer_view" />
 
                     <View
                         android:layout_width="130dp"
                         android:layout_height="30dp"
                         android:layout_marginTop="@dimen/space_8dp"
-                        android:background="@drawable/shimmer_view"/>
+                        android:background="@drawable/shimmer_view" />
 
                     <View
                         android:layout_width="180dp"
@@ -179,7 +221,7 @@
                     android:layout_width="@dimen/space_50dp"
                     android:layout_height="@dimen/space_50dp"
                     android:layout_marginEnd="@dimen/space_21dp"
-                    android:background="@drawable/shimmer_view"/>
+                    android:background="@drawable/shimmer_view" />
             </LinearLayout>
 
             <View
@@ -195,8 +237,8 @@
                 android:id="@+id/view_today"
                 android:layout_width="100dp"
                 android:layout_height="20dp"
-                android:layout_marginTop="@dimen/space_8dp"
                 android:layout_marginStart="@dimen/space_20dp"
+                android:layout_marginTop="@dimen/space_8dp"
                 android:background="@drawable/shimmer_view"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/view_date" />
@@ -211,9 +253,9 @@
                 app:layout_constraintTop_toTopOf="@id/view_today">
 
                 <View
-                    android:background="@color/shimmer_color"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:background="@color/shimmer_color" />
 
             </com.google.android.material.card.MaterialCardView>
 

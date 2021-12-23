@@ -54,7 +54,7 @@ class CustomAccessTokenInterceptor(private val context: Context) : Interceptor {
         val response: Response = chain.proceed(request)
 
         if (response.code == HttpURLConnection.HTTP_UNAUTHORIZED) {
-            CoroutineScope(Dispatchers.IO).launch {
+            val job = CoroutineScope(Dispatchers.IO).launch {
                 tokenRepo.refreshToken(
                     preferenceManager.getStringData(PrefConstants.PREF_REFRESH_TOKEN) ?: ""
                 ).collectLatest {
@@ -69,6 +69,7 @@ class CustomAccessTokenInterceptor(private val context: Context) : Interceptor {
                 isRefreshed = false
                 val newAccessToken: String =
                     preferenceManager.getStringData(PrefConstants.PREF_ACCESS_TOKEN) ?: ""
+                job.cancel()
                 // Access token is refreshed in another thread.
                 if (accessToken != newAccessToken) {
                     return chain.proceed(newRequestWithAccessToken(request, newAccessToken))

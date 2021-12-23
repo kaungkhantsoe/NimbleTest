@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.SCROLL_STATE_IDLE
 import com.bumptech.glide.RequestManager
+import com.kks.kconnectioncheck.KConnectionCheck
 import com.kks.nimbletest.R
 import com.kks.nimbletest.adapter.SurveyAdapter
 import com.kks.nimbletest.constants.AppConstants
@@ -20,7 +21,6 @@ import com.kks.nimbletest.ui.login.LoginActivity
 import com.kks.nimbletest.util.DateUtil
 import com.kks.nimbletest.util.FadeInOutPageTransformer
 import com.kks.nimbletest.util.PreferenceManager
-import com.kks.nimbletest.util.extensions.toast
 import com.kks.nimbletest.util.listeners.RecyclerViewItemClickListener
 import com.kks.nimbletest.viewmodel.home.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,7 +31,8 @@ import javax.inject.Inject
  */
 
 @AndroidEntryPoint
-class HomeActivity : BaseViewBindingActivity<ActivityHomeBinding>(), RecyclerViewItemClickListener {
+class HomeActivity : BaseViewBindingActivity<ActivityHomeBinding>(), RecyclerViewItemClickListener,
+    KConnectionCheck.ConnectionStatusChangeListener {
 
     @Inject
     lateinit var requestManager: RequestManager
@@ -57,7 +58,10 @@ class HomeActivity : BaseViewBindingActivity<ActivityHomeBinding>(), RecyclerVie
 
         override fun onPageScrollStateChanged(state: Int) {
             super.onPageScrollStateChanged(state)
+            binding.swipeRefresh.isEnabled = false
             if (state == SCROLL_STATE_IDLE) {
+                binding.swipeRefresh.isEnabled = true
+                binding.dotsIndicator.selection = mPosition
                 if (!isLoading && mPosition == surveyList.size-1 && !endOfList) {
                     pageNumber++
                     getSurveyList(pageNumber)
@@ -87,6 +91,18 @@ class HomeActivity : BaseViewBindingActivity<ActivityHomeBinding>(), RecyclerVie
             SurveyDetailActivity.start(this@HomeActivity)
         }
 
+        binding.swipeRefresh.setOnRefreshListener {
+            binding.tvTitle.text = ""
+            binding.tvDescription.text = ""
+            getSurveyList(1)
+        }
+
+        binding.btnRetry.setOnClickListener {
+            binding.tvTitle.text = ""
+            binding.tvDescription.text = ""
+            getSurveyList(1)
+        }
+
         binding.tvDate.text = DateUtil.getBeautifiedCurrentDate()
 
         adapter = SurveyAdapter(this,requestManager)
@@ -99,6 +115,8 @@ class HomeActivity : BaseViewBindingActivity<ActivityHomeBinding>(), RecyclerVie
 
         observeUserDetail()
         viewModel.getUserDetail()
+
+        KConnectionCheck.addConnectionCheck(this, this, this);
     }
 
     private fun updateTexts(position: Int) {
@@ -110,8 +128,13 @@ class HomeActivity : BaseViewBindingActivity<ActivityHomeBinding>(), RecyclerVie
     }
 
     private fun getSurveyList(page: Int) {
-        if (page == 1)
+        if (page == 1) {
+            binding.swipeRefresh.isRefreshing = false
+            pageNumber = 1
+            endOfList = false
             surveyList.clear()
+            adapter.clearData()
+        }
         if (!endOfList) {
             viewModel.getSurveyList(page, pageSize)
         }
@@ -133,27 +156,42 @@ class HomeActivity : BaseViewBindingActivity<ActivityHomeBinding>(), RecyclerVie
 
                     adapter.addAll(it.successData)
 
-                    binding.dotsIndicator.setViewPager2(binding.vpSurveys)
+                    if (surveyList.size > 0) {
+                        binding.dotsIndicator.count = surveyList.size
+                        if(pageNumber == 1)
+                            updateTexts(0)
+                    }
+                    binding.swipeRefresh.isRefreshing = false
 
-                    if(pageNumber == 1 && surveyList.size > 0)
-                        updateTexts(0)
+                    changeErrorView(View.GONE)
                 }
-                is ResourceState.Error -> handleError(it.error)
+                is ResourceState.Error -> {
+                    handleError(it.error)
+                    binding.swipeRefresh.isRefreshing = false
+                }
                 is ResourceState.GenericError -> {
                     if (pageNumber > 1 && it.code == 404)
                         endOfList = true
                     else
                         handleError(it.error)
+                    binding.swipeRefresh.isRefreshing = false
                 }
-                ResourceState.NetworkError -> handleError(AppConstants.NETWORK_ERROR)
+                ResourceState.NetworkError -> {
+                    handleError(AppConstants.NETWORK_ERROR)
+                    binding.swipeRefresh.isRefreshing = false
+                }
                 ResourceState.Loading -> {
                     showLoading()
+                    if (pageNumber != 1)
+                        binding.swipeRefresh.isRefreshing = true
                 }
                 ResourceState.EndReach -> {
                     endOfList = true
+                    binding.swipeRefresh.isRefreshing = false
                 }
                 ResourceState.ProtocolError -> {
                     showSessionExpire()
+                    binding.swipeRefresh.isRefreshing = false
                 }
             }
         }
@@ -180,10 +218,11 @@ class HomeActivity : BaseViewBindingActivity<ActivityHomeBinding>(), RecyclerVie
                     requestManager
                         .load(it.successData.attributes?.avatar_url)
                         .into(binding.ivUser)
+                    changeErrorView(View.GONE)
                 }
-                is ResourceState.Error -> handleError("Profile: ${it.error}")
-                is ResourceState.GenericError -> handleError("Profile: ${it.error}")
-                ResourceState.NetworkError -> handleError("Profile: ${AppConstants.NETWORK_ERROR}")
+                is ResourceState.Error -> handleError(it.error)
+                is ResourceState.GenericError -> handleError(it.error)
+                ResourceState.NetworkError -> handleError(AppConstants.NETWORK_ERROR)
                 else -> {}
             }
         }
@@ -203,9 +242,13 @@ class HomeActivity : BaseViewBindingActivity<ActivityHomeBinding>(), RecyclerVie
     }
 
     private fun handleError(err: String?) {
-        toast(err ?: "")
+        binding.tvError.text = err
+        changeErrorView(View.VISIBLE)
         pageNumber--
         showLoading(false)
+    }
+    private fun changeErrorView(visibility: Int) {
+        binding.llError.visibility = visibility
     }
 
     override fun onDestroy() {
@@ -215,5 +258,9 @@ class HomeActivity : BaseViewBindingActivity<ActivityHomeBinding>(), RecyclerVie
 
     override fun onItemClick(position: Int) {
         SurveyDetailActivity.start(this@HomeActivity)
+    }
+
+    override fun onConnectionStatusChange(status: Boolean) {
+
     }
 }

@@ -56,7 +56,7 @@ class TokenAuthenticator(private val context: Context) : Authenticator {
                 return null
 
             // Request new token with refreshToken
-            CoroutineScope(Dispatchers.IO).launch {
+            val job = CoroutineScope(Dispatchers.IO).launch {
                 tokenRepo.refreshToken(
                     preferenceManager.getStringData(PrefConstants.PREF_REFRESH_TOKEN) ?: ""
                 ).collectLatest {
@@ -71,6 +71,7 @@ class TokenAuthenticator(private val context: Context) : Authenticator {
                 isRefreshed = false
                 // Create new request with new accessToken fetched earlier
                 val newToken = preferenceManager.getStringData(PrefConstants.PREF_ACCESS_TOKEN)
+                job.cancel()
                 return response.request.newBuilder().header(
                     "Authorization",
                     "Bearer $newToken"
