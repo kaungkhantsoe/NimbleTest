@@ -128,13 +128,16 @@ dependencies {
     implementation "com.facebook.shimmer:shimmer:$shimmer_version"
 
     // Dot indicator
-    implementation "com.tbuonomo:dotsindicator:$dotsindicator_version"
+    implementation 'com.github.adrielcafe:PageIndicatorView:1.0.6'
 
     // Loading spin
     implementation "com.github.ybq:Android-SpinKit:$spinkit_version"
 
     // Swipe refresh
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:$swipe_refresh_version")
+
+    // Connection Check
+    implementation "com.github.kaungkhantsoe:KConnectionCheckKotlin:$kconnection_version"
 
     //
     // --------------------------- Unit Test ---------------------------
