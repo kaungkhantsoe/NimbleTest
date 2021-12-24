@@ -23,12 +23,6 @@ class ForgetPasswordRepoImpl @Inject constructor(
 
     override fun sendForgetPasswordEmail(email: String): Flow<ResourceState<String>> =
         flow {
-            emit(ResourceState.Loading)
-
-            if (email.isEmpty()) {
-                emit(ResourceState.Error(error_email_empty))
-            }
-
             val apiResult = safeApiCall(Dispatchers.IO) {
 
                 apiInterface.sendForgetPasswordMail(

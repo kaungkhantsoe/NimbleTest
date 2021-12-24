@@ -13,14 +13,16 @@ import kotlinx.coroutines.flow.flow
 
 class FakeForgetPasswordRepository: ForgetPasswordRepo {
 
-    var client_id = ""
-    var client_secret = ""
+    var clientId = ""
+    var clientSecret = ""
 
     override fun sendForgetPasswordEmail(email: String): Flow<ResourceState<String>> =
         flow {
             emit(ResourceState.Loading)
 
-            if (client_id.isEmpty() || client_secret.isEmpty())
+            if (clientId.isEmpty() || clientSecret.isEmpty())
+                emit(ResourceState.GenericError(403,"invalid_client"))
+            else if (email == "invalid")
                 emit(ResourceState.GenericError(403,"invalid_client"))
             else if (email.isEmpty())
                 emit(ResourceState.Error(error_email_empty))
