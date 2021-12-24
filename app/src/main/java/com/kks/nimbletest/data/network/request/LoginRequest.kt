@@ -1,13 +1,18 @@
 package com.kks.nimbletest.data.network.request
 
+import com.google.gson.annotations.SerializedName
+
 /**
  * Created by kaungkhantsoe at 19/12/2021
  */
 
 data class LoginRequest(
-    val grant_type: String = "password",
+    @SerializedName("grant_type")
+    val grantType: String = "password",
     val email: String,
     val password: String,
-    val client_id: String,
-    val client_secret: String
+    @SerializedName("client_id")
+    val clientId: String,
+    @SerializedName("client_secret")
+    val clientSecret: String
 )

@@ -1,10 +1,11 @@
 package com.kks.nimbletest.repo.home
 
-import com.kks.nimbletest.constants.AppConstants
 import com.kks.nimbletest.data.network.ApiInterface
 import com.kks.nimbletest.data.network.ResourceState
 import com.kks.nimbletest.data.network.reponse.SurveyResponse
 import com.kks.nimbletest.data.network.reponse.UserResponse
+import com.kks.nimbletest.util.SUCCESS_WITH_NULL_ERROR
+import com.kks.nimbletest.util.UNKNOWN_ERROR_MESSAGE
 import com.kks.nimbletest.util.executeOrThrow
 import com.kks.nimbletest.util.extensions.safeApiCall
 import kotlinx.coroutines.Dispatchers
@@ -39,7 +40,7 @@ class HomeRepoImpl @Inject constructor(
                     else
                         emit(ResourceState.Success(it))
 
-                } ?: emit(ResourceState.Error(AppConstants.SUCCESS_WITH_NULL_ERROR))
+                } ?: emit(ResourceState.Error(SUCCESS_WITH_NULL_ERROR))
             }
             is ResourceState.Error -> emit(ResourceState.Error(apiResult.error))
             is ResourceState.GenericError -> emit(
@@ -54,7 +55,7 @@ class HomeRepoImpl @Inject constructor(
             }
         }
     }.catch { error ->
-        emit(ResourceState.Error(error.message ?: AppConstants.UNKNOWN_ERROR_MESSAGE))
+        emit(ResourceState.Error(error.message ?: UNKNOWN_ERROR_MESSAGE))
     }
 
     override fun fetchUserDetail(): Flow<ResourceState<UserResponse>> =
@@ -69,7 +70,7 @@ class HomeRepoImpl @Inject constructor(
                 is ResourceState.Success -> {
                     apiResult.successData?.data?.let {
                         emit(ResourceState.Success(it))
-                    } ?: emit(ResourceState.Error(AppConstants.SUCCESS_WITH_NULL_ERROR))
+                    } ?: emit(ResourceState.Error(SUCCESS_WITH_NULL_ERROR))
                 }
                 is ResourceState.Error -> emit(ResourceState.Error(apiResult.error))
                 is ResourceState.GenericError -> emit(
@@ -84,6 +85,6 @@ class HomeRepoImpl @Inject constructor(
                 }
             }
         }.catch { error ->
-            emit(ResourceState.Error(error.message ?: AppConstants.UNKNOWN_ERROR_MESSAGE))
+            emit(ResourceState.Error(error.message ?: UNKNOWN_ERROR_MESSAGE))
         }
 }

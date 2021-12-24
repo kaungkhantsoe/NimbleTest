@@ -2,8 +2,6 @@ package com.kks.nimbletest.viewholder
 
 import android.view.View
 import android.widget.ImageView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.RequestManager
 import com.kks.nimbletest.R
 import com.kks.nimbletest.data.network.reponse.SurveyResponse
 import com.kks.nimbletest.util.extensions.loadImage
@@ -21,7 +19,7 @@ class SurveyViewHolder(
 
     override fun onBindView(data: SurveyResponse) {
         image = itemView.findViewById(R.id.iv_survey)
-        itemView.context.loadImage(data.attributes?.cover_image_url,image)
+        itemView.context.loadImage(data.attributes?.coverImageUrl,image)
 
         itemView.setOnClickListener {
             recyclerViewItemClickListener.onItemClick(adapterPosition)

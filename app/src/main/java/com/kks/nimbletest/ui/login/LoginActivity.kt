@@ -4,13 +4,13 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
-import com.kks.nimbletest.constants.AppConstants
-import com.kks.nimbletest.constants.PrefConstants
 import com.kks.nimbletest.data.network.ResourceState
 import com.kks.nimbletest.databinding.ActivityLoginBinding
 import com.kks.nimbletest.ui.base.BaseViewBindingActivity
 import com.kks.nimbletest.ui.forget.ForgetPasswordActivity
 import com.kks.nimbletest.ui.home.HomeActivity
+import com.kks.nimbletest.util.NETWORK_ERROR
+import com.kks.nimbletest.util.PREF_LOGGED_IN
 import com.kks.nimbletest.util.PreferenceManager
 import com.kks.nimbletest.util.extensions.hideKeyboard
 import com.kks.nimbletest.util.extensions.toast
@@ -57,10 +57,10 @@ class LoginActivity : BaseViewBindingActivity<ActivityLoginBinding>() {
                 }
                 is ResourceState.Error -> handleError(state.error)
                 is ResourceState.GenericError -> handleError(state.error)
-                ResourceState.NetworkError -> handleError(AppConstants.NETWORK_ERROR)
+                ResourceState.NetworkError -> handleError(NETWORK_ERROR)
                 is ResourceState.Success -> {
                     binding.spinKit.visibility = View.INVISIBLE
-                    preferenceManager.setBooleanData(PrefConstants.PREF_LOGGED_IN,true)
+                    preferenceManager.setBooleanData(PREF_LOGGED_IN,true)
                     startActivity(Intent(this@LoginActivity,HomeActivity::class.java))
                     finish()
                 }

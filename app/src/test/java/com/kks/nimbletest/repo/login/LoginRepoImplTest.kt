@@ -5,12 +5,13 @@ import com.kks.nimbletest.FakeCustomKeyGenerator
 import com.kks.nimbletest.util.MockResponseFileReader
 import com.kks.nimbletest.util.MockitoHelper.anyObject
 import com.kks.nimbletest.TestConstants
-import com.kks.nimbletest.constants.AppConstants
 import com.kks.nimbletest.data.network.ApiInterface
 import com.kks.nimbletest.data.network.ResourceState
 import com.kks.nimbletest.data.network.reponse.BaseResponse
 import com.kks.nimbletest.data.network.reponse.LoginResponse
 import com.kks.nimbletest.util.PreferenceManager
+import com.kks.nimbletest.util.error_email_empty
+import com.kks.nimbletest.util.error_password_empty
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.first
@@ -58,7 +59,7 @@ class LoginRepoImplTest {
             val secondResult = sut.loginWithEmailAndPassword(email, password).drop(1).first()
 
             // Then
-            assertThat((secondResult as ResourceState.Error).error).isEqualTo(AppConstants.error_email_empty)
+            assertThat((secondResult as ResourceState.Error).error).isEqualTo(error_email_empty)
         }
     }
 
@@ -73,7 +74,7 @@ class LoginRepoImplTest {
             val secondResult = sut.loginWithEmailAndPassword(email, password).drop(1).first()
 
             // Then
-            assertThat((secondResult as ResourceState.Error).error).isEqualTo(AppConstants.error_password_empty)
+            assertThat((secondResult as ResourceState.Error).error).isEqualTo(error_password_empty)
         }
     }
 

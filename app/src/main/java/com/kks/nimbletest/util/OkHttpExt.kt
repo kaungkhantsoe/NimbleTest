@@ -1,6 +1,5 @@
 package com.kks.nimbletest.util
 
-import com.kks.nimbletest.constants.AppConstants
 import com.kks.nimbletest.data.network.reponse.BaseResponse
 import com.kks.nimbletest.data.network.reponse.LoginResponse
 import org.json.JSONObject
@@ -9,6 +8,15 @@ import retrofit2.HttpException
 import retrofit2.Response
 import java.lang.Exception
 import java.net.UnknownHostException
+
+const val UNKNOWN_ERROR = "Unknown error"
+const val SUCCESS_WITH_NULL_ERROR = "Success with null error"
+const val UNKNOWN_ERROR_MESSAGE = "Unknown error message"
+const val NETWORK_ERROR = "Network Error"
+
+const val error_email_empty = "Email cannot be empty"
+const val error_password_empty = "Password cannot be empty"
+const val success = "success"
 
 fun <T> Call<T>.executeOrThrow(): T? {
     var response: Response<T>? = null
@@ -41,7 +49,7 @@ fun <T> Call<T>.executeOrThrow(): T? {
                         }
                     }
 
-                    throw Exception(AppConstants.UNKNOWN_ERROR)
+                    throw Exception(UNKNOWN_ERROR)
                 }
             }
 

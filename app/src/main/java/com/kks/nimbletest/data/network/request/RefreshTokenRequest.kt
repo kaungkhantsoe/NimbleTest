@@ -1,12 +1,18 @@
 package com.kks.nimbletest.data.network.request
 
+import com.google.gson.annotations.SerializedName
+
 /**
  * Created by kaungkhantsoe at 19/12/2021
  */
 
 data class RefreshTokenRequest(
-    val grant_type: String = "refresh_token",
-    val refresh_token: String,
-    val client_id: String,
-    val client_secret: String
+    @SerializedName("grant_type")
+    val grantType: String = "refresh_token",
+    @SerializedName("refresh_token")
+    val refreshToken: String,
+    @SerializedName("client_id")
+    val clientId: String,
+    @SerializedName("client_secret")
+    val clientSecret: String
 )

@@ -5,11 +5,11 @@ import android.content.Intent
 import android.os.CountDownTimer
 import android.view.LayoutInflater
 import com.kks.nimbletest.R
-import com.kks.nimbletest.constants.PrefConstants
 import com.kks.nimbletest.databinding.ActivitySplashBinding
 import com.kks.nimbletest.ui.base.BaseViewBindingActivity
 import com.kks.nimbletest.ui.home.HomeActivity
 import com.kks.nimbletest.ui.login.LoginActivity
+import com.kks.nimbletest.util.PREF_LOGGED_IN
 import com.kks.nimbletest.util.PreferenceManager
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -39,7 +39,7 @@ class SplashActivity : BaseViewBindingActivity<ActivitySplashBinding>() {
             }
 
             override fun onFinish() {
-                if (preferenceManager.getBooleanData(PrefConstants.PREF_LOGGED_IN)) {
+                if (preferenceManager.getBooleanData(PREF_LOGGED_IN)) {
                     startActivity(Intent(this@SplashActivity,HomeActivity::class.java))
                 } else {
                     val intent = Intent(this@SplashActivity, LoginActivity::class.java)
