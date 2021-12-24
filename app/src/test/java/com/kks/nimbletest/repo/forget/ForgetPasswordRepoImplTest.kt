@@ -10,8 +10,8 @@ import com.kks.nimbletest.util.MockResponseFileReader
 import com.kks.nimbletest.util.MockitoHelper
 import com.kks.nimbletest.util.error_email_empty
 import com.kks.nimbletest.util.success
-import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
@@ -40,20 +40,6 @@ class ForgetPasswordRepoImplTest {
     }
 
     @Test
-    fun `send forget password with empty email, return error`() {
-        runBlocking {
-            // Given
-            val email = ""
-
-            // When
-            val secondResult = sut.sendForgetPasswordEmail(email).drop(1).first()
-
-            // Then
-            assertThat((secondResult as ResourceState.Error).error).isEqualTo(error_email_empty)
-        }
-    }
-
-    @Test
     fun `send forget password with invalid client_secret or client_id, return error`() {
         runBlocking {
             // Given
@@ -64,10 +50,10 @@ class ForgetPasswordRepoImplTest {
             val email = "my@gmail.com"
 
             // When
-            val secondResult = sut.sendForgetPasswordEmail(email).drop(1).first()
+            val result = sut.sendForgetPasswordEmail(email).take(1).first()
 
             // Then
-            assertThat(secondResult).isEqualTo(ResourceState.GenericError(403,"invalid_client"))
+            assertThat(result).isEqualTo(ResourceState.GenericError(403,"invalid_client"))
         }
     }
 
@@ -84,11 +70,11 @@ class ForgetPasswordRepoImplTest {
             val email = "my@gmail.com"
 
             // When
-            val secondResult = sut.sendForgetPasswordEmail(email)
-                .drop(1).first()
+            val result = sut.sendForgetPasswordEmail(email)
+                .take(1).first()
 
             // Then
-            assertThat(secondResult).isEqualTo(ResourceState.Success(success))
+            assertThat(result).isEqualTo(ResourceState.Success(success))
         }
     }
 }

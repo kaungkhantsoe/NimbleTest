@@ -26,8 +26,6 @@ class HomeRepoImpl @Inject constructor(
         pageNumber: Int,
         pageSize: Int
     ): Flow<ResourceState<List<SurveyResponse>>> = flow {
-        emit(ResourceState.Loading)
-
         val apiResult = safeApiCall(Dispatchers.IO) {
             apiInterface.getSurveyList(pageNumber, pageSize).executeOrThrow()
         }
@@ -60,8 +58,6 @@ class HomeRepoImpl @Inject constructor(
 
     override fun fetchUserDetail(): Flow<ResourceState<UserResponse>> =
         flow {
-            emit(ResourceState.Loading)
-
             val apiResult = safeApiCall(Dispatchers.IO) {
                 apiInterface.getUserDetail().executeOrThrow()
             }

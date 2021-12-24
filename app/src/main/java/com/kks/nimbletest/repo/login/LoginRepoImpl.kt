@@ -27,50 +27,42 @@ class LoginRepoImpl @Inject constructor(
         password: String
     ): Flow<ResourceState<LoginResponse>> =
         flow {
-            emit(ResourceState.Loading)
+            val apiResult = safeApiCall(Dispatchers.IO) {
+                apiInterface.loginUser(
+                    LoginRequest(
+                        email = email,
+                        password = password,
+                        clientId = customKeyProvider.getClientId(),
+                        clientSecret = customKeyProvider.getClientSecret()
+                    )
+                )
+                    .executeOrThrow()
+            }
 
-            when {
-                email.isEmpty() -> emit(ResourceState.Error(error_email_empty))
-                password.isEmpty() -> emit(ResourceState.Error(error_password_empty))
+            when (apiResult) {
+                is ResourceState.Success -> {
+                    apiResult.successData?.data?.let { loginResponse ->
+                        preferenceManager.setStringData(
+                            PREF_ACCESS_TOKEN,
+                            loginResponse.attributes?.accessToken ?: ""
+                        )
+                        preferenceManager.setStringData(
+                            PREF_REFRESH_TOKEN,
+                            loginResponse.attributes?.refreshToken ?: ""
+                        )
+                        emit(ResourceState.Success(loginResponse))
+
+                    } ?: emit(ResourceState.Error(SUCCESS_WITH_NULL_ERROR))
+                }
+                is ResourceState.Error -> emit(ResourceState.Error(apiResult.error))
+                is ResourceState.GenericError -> emit(
+                    ResourceState.GenericError(
+                        apiResult.code,
+                        apiResult.error
+                    )
+                )
                 else -> {
-                    val apiResult = safeApiCall(Dispatchers.IO) {
-                        apiInterface.loginUser(
-                            LoginRequest(
-                                email = email,
-                                password = password,
-                                clientId = customKeyProvider.getClientId(),
-                                clientSecret = customKeyProvider.getClientSecret()
-                            )
-                        )
-                            .executeOrThrow()
-                    }
-
-                    when (apiResult) {
-                        is ResourceState.Success -> {
-                            apiResult.successData?.data?.let { loginResponse ->
-                                preferenceManager.setStringData(
-                                    PREF_ACCESS_TOKEN,
-                                    loginResponse.attributes?.accessToken ?: ""
-                                )
-                                preferenceManager.setStringData(
-                                    PREF_REFRESH_TOKEN,
-                                    loginResponse.attributes?.refreshToken ?: ""
-                                )
-                                emit(ResourceState.Success(loginResponse))
-
-                            } ?: emit(ResourceState.Error(SUCCESS_WITH_NULL_ERROR))
-                        }
-                        is ResourceState.Error -> emit(ResourceState.Error(apiResult.error))
-                        is ResourceState.GenericError -> emit(
-                            ResourceState.GenericError(
-                                apiResult.code,
-                                apiResult.error
-                            )
-                        )
-                        else -> {
-                            emit(ResourceState.NetworkError)
-                        }
-                    }
+                    emit(ResourceState.NetworkError)
                 }
             }
         }.catch { error ->

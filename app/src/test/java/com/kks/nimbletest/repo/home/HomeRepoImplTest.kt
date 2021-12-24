@@ -10,6 +10,7 @@ import com.kks.nimbletest.util.MockResponseFileReader
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
@@ -50,7 +51,7 @@ class HomeRepoImplTest {
             val pageSize = 1
 
             // When
-            val result = sut.fetchSurveyList(pageNumber, pageSize).drop(1).first()
+            val result = sut.fetchSurveyList(pageNumber, pageSize).take(1).first()
 
             // Then
             assertThat(result is ResourceState.GenericError).isTrue()
@@ -72,7 +73,7 @@ class HomeRepoImplTest {
             val pageSize = 1
 
             // When
-            val result = sut.fetchSurveyList(pageNumber, pageSize).drop(1).first()
+            val result = sut.fetchSurveyList(pageNumber, pageSize).take(1).first()
 
             // Then
             assertThat(result).isEqualTo(ResourceState.Success(response.body()!!.data))
@@ -87,7 +88,7 @@ class HomeRepoImplTest {
             `when`(apiInterface.getUserDetail()).thenReturn(Calls.response(response))
 
             // When
-            val result = sut.fetchUserDetail().drop(1).first()
+            val result = sut.fetchUserDetail().take(1).first()
 
             // Then
             assertThat(result).isEqualTo(ResourceState.Success(response.body()!!.data))

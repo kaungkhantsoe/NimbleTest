@@ -6,8 +6,11 @@ import com.kks.nimbletest.TestConstants
 import com.kks.nimbletest.fake_repo.FakeLoginRepository
 import com.kks.nimbletest.data.network.ResourceState
 import com.kks.nimbletest.repo.login.LoginRepo
+import com.kks.nimbletest.util.error_email_empty
+import com.kks.nimbletest.util.error_password_empty
 import com.kks.nimbletest.util.getOrAwaitValue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import org.junit.After
 import org.junit.Before
@@ -38,12 +41,48 @@ class LoginViewModelTest {
     }
 
     @Test
+    fun `login with empty email, return email empty error`() {
+        runBlocking {
+            // Given
+            val password = "password"
+            val email = ""
+            (fakeLoginRepo as FakeLoginRepository).clientId = "client_id"
+            (fakeLoginRepo as FakeLoginRepository).clientSecret = "client_secret"
+
+            // When
+            sut.login(email, password)
+
+            // Then
+            val result =  sut.loginLiveData.getOrAwaitValue()
+            assertThat((result as ResourceState.Error).error).isEqualTo(error_email_empty)
+        }
+    }
+
+    @Test
+    fun `login with empty password, return password empty error`() {
+        runBlocking {
+            // Given
+            val password = ""
+            val email = "my@gmail.com"
+            (fakeLoginRepo as FakeLoginRepository).clientId = "client_id"
+            (fakeLoginRepo as FakeLoginRepository).clientSecret = "client_secret"
+
+            // When
+            sut.login(email, password)
+
+            // Then
+            val result =  sut.loginLiveData.getOrAwaitValue()
+            assertThat((result as ResourceState.Error).error).isEqualTo(error_password_empty)
+        }
+    }
+
+    @Test
     fun `login with invalid email or password, return invalid_grant error`() {
         // Given
-        val email = ""
-        val password = ""
-        (fakeLoginRepo as FakeLoginRepository).client_id = "client_id"
-        (fakeLoginRepo as FakeLoginRepository).client_secret = "client_secret"
+        val email = "invalid"
+        val password = "invalid"
+        (fakeLoginRepo as FakeLoginRepository).clientId = "client_id"
+        (fakeLoginRepo as FakeLoginRepository).clientSecret = "client_secret"
 
         // When
         sut.login(email, password)
@@ -58,8 +97,8 @@ class LoginViewModelTest {
         // Given
         val email = "email"
         val password = "password"
-        (fakeLoginRepo as FakeLoginRepository).client_id = ""
-        (fakeLoginRepo as FakeLoginRepository).client_secret = ""
+        (fakeLoginRepo as FakeLoginRepository).clientId = ""
+        (fakeLoginRepo as FakeLoginRepository).clientSecret = ""
 
         // When
         sut.login(email, password)
@@ -74,8 +113,8 @@ class LoginViewModelTest {
         // Given
         val email = "email"
         val password = "password"
-        (fakeLoginRepo as FakeLoginRepository).client_id = "client_id"
-        (fakeLoginRepo as FakeLoginRepository).client_secret = "client_secret"
+        (fakeLoginRepo as FakeLoginRepository).clientId = "client_id"
+        (fakeLoginRepo as FakeLoginRepository).clientSecret = "client_secret"
 
         // When
         sut.login(email, password)

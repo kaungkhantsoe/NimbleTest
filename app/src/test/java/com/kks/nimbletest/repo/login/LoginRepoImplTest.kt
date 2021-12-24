@@ -10,11 +10,9 @@ import com.kks.nimbletest.data.network.ResourceState
 import com.kks.nimbletest.data.network.reponse.BaseResponse
 import com.kks.nimbletest.data.network.reponse.LoginResponse
 import com.kks.nimbletest.util.PreferenceManager
-import com.kks.nimbletest.util.error_email_empty
-import com.kks.nimbletest.util.error_password_empty
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
@@ -49,36 +47,6 @@ class LoginRepoImplTest {
     }
 
     @Test
-    fun `login with empty email, return email empty error`() {
-        runBlocking {
-            // Given
-            val password = "password"
-            val email = ""
-
-            // When
-            val secondResult = sut.loginWithEmailAndPassword(email, password).drop(1).first()
-
-            // Then
-            assertThat((secondResult as ResourceState.Error).error).isEqualTo(error_email_empty)
-        }
-    }
-
-    @Test
-    fun `login with empty password, return email empty error`() {
-        runBlocking {
-            // Given
-            val password = ""
-            val email = "my@gmail.com"
-
-            // When
-            val secondResult = sut.loginWithEmailAndPassword(email, password).drop(1).first()
-
-            // Then
-            assertThat((secondResult as ResourceState.Error).error).isEqualTo(error_password_empty)
-        }
-    }
-
-    @Test
     fun `login with invalid password, return invalid grant_error`() {
         runBlocking {
             // Given
@@ -90,10 +58,10 @@ class LoginRepoImplTest {
             val email = "my@gmail.com"
 
             // When
-            val secondResult = sut.loginWithEmailAndPassword(email, password).drop(1).first()
+            val result = sut.loginWithEmailAndPassword(email, password).take(1).first()
 
             // Then
-            assertThat(secondResult).isEqualTo(ResourceState.GenericError(400,"invalid_grant"))
+            assertThat(result).isEqualTo(ResourceState.GenericError(400,"invalid_grant"))
         }
     }
 
@@ -109,10 +77,10 @@ class LoginRepoImplTest {
             val email = "invalid"
 
             // When
-            val secondResult = sut.loginWithEmailAndPassword(email, password).drop(1).first()
+            val result = sut.loginWithEmailAndPassword(email, password).take(1).first()
 
             // Then
-            assertThat(secondResult).isEqualTo(ResourceState.GenericError(400,"invalid_grant"))
+            assertThat(result).isEqualTo(ResourceState.GenericError(400,"invalid_grant"))
 
         }
     }
@@ -129,10 +97,10 @@ class LoginRepoImplTest {
             val email = "my@gmail.com"
 
             // When
-            val secondResult = sut.loginWithEmailAndPassword(email, password).drop(1).first()
+            val result = sut.loginWithEmailAndPassword(email, password).take(1).first()
 
             // Then
-            assertThat(secondResult).isEqualTo(ResourceState.GenericError(403,"invalid_client"))
+            assertThat(result).isEqualTo(ResourceState.GenericError(403,"invalid_client"))
         }
     }
 
@@ -150,12 +118,12 @@ class LoginRepoImplTest {
             val email = "my@gmail.com"
 
             // When
-            val secondResult = sut.loginWithEmailAndPassword(email, password)
-                .drop(1).first()
+            val result = sut.loginWithEmailAndPassword(email, password)
+                .take(1).first()
 
             // Then
             verify(preferenceManager, times(2)).setStringData(anyObject(), anyObject())
-            assertThat(secondResult).isEqualTo(ResourceState.Success(response.body()!!.data))
+            assertThat(result).isEqualTo(ResourceState.Success(response.body()!!.data))
         }
     }
 }

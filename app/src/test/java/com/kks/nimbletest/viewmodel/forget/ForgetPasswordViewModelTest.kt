@@ -1,7 +1,7 @@
 package com.kks.nimbletest.viewmodel.forget
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.google.common.truth.Truth
+import com.google.common.truth.Truth.assertThat
 import com.kks.nimbletest.data.network.ResourceState
 import com.kks.nimbletest.fake_repo.FakeForgetPasswordRepository
 import com.kks.nimbletest.repo.forget.ForgetPasswordRepo
@@ -30,7 +30,7 @@ class ForgetPasswordViewModelTest {
     @Before
     fun setup() {
         fakeForgetPasswordRepo = FakeForgetPasswordRepository()
-        sut = ForgetPasswordViewModel(fakeForgetPasswordRepo,testCoroutineDispatcher)
+        sut = ForgetPasswordViewModel(fakeForgetPasswordRepo, testCoroutineDispatcher)
     }
 
     @After
@@ -39,47 +39,63 @@ class ForgetPasswordViewModelTest {
     }
 
     @Test
-    fun `send forget password with invalid client_id or client_secret, return error`() {
+    fun `send forget password with empty email, return error`() {
         // Given
-        val email = "email"
-        (fakeForgetPasswordRepo as FakeForgetPasswordRepository).client_id = ""
-        (fakeForgetPasswordRepo as FakeForgetPasswordRepository).client_secret = ""
+        val email = ""
+        (fakeForgetPasswordRepo as FakeForgetPasswordRepository).clientId = ""
+        (fakeForgetPasswordRepo as FakeForgetPasswordRepository).clientSecret = ""
 
         // When
         sut.sendForgetPasswordEmail(email)
 
         // Then
-        val result =  sut.forgetPasswordLiveData.getOrAwaitValue()
-        Truth.assertThat(result).isEqualTo(ResourceState.GenericError(403,"invalid_client"))
+        val result = sut.forgetPasswordLiveData.getOrAwaitValue()
+        assertThat((result as ResourceState.Error).error).isEqualTo(error_email_empty)
+
+    }
+
+    @Test
+    fun `send forget password with invalid client_id or client_secret, return error`() {
+        // Given
+        val email = "email"
+        (fakeForgetPasswordRepo as FakeForgetPasswordRepository).clientId = ""
+        (fakeForgetPasswordRepo as FakeForgetPasswordRepository).clientSecret = ""
+
+        // When
+        sut.sendForgetPasswordEmail(email)
+
+        // Then
+        val result = sut.forgetPasswordLiveData.getOrAwaitValue()
+        assertThat(result).isEqualTo(ResourceState.GenericError(403, "invalid_client"))
     }
 
     @Test
     fun `send forget password with invalid email,return error`() {
         // Given
-        val email = ""
-        (fakeForgetPasswordRepo as FakeForgetPasswordRepository).client_id = "client_id"
-        (fakeForgetPasswordRepo as FakeForgetPasswordRepository).client_secret = "client_secret"
+        val email = "invalid"
+        (fakeForgetPasswordRepo as FakeForgetPasswordRepository).clientId = "client_id"
+        (fakeForgetPasswordRepo as FakeForgetPasswordRepository).clientSecret = "client_secret"
 
         // When
         sut.sendForgetPasswordEmail(email)
 
         // Then
-        val result =  sut.forgetPasswordLiveData.getOrAwaitValue()
-        Truth.assertThat((result as ResourceState.Error).error).isEqualTo(error_email_empty)
+        val result = sut.forgetPasswordLiveData.getOrAwaitValue()
+        assertThat((result as ResourceState.GenericError).error).isEqualTo("invalid_client")
     }
 
     @Test
-    fun  `send forget password with valid data, return success`() {
+    fun `send forget password with valid data, return success`() {
         // Given
         val email = "email"
-        (fakeForgetPasswordRepo as FakeForgetPasswordRepository).client_id = "client_id"
-        (fakeForgetPasswordRepo as FakeForgetPasswordRepository).client_secret = "client_secret"
+        (fakeForgetPasswordRepo as FakeForgetPasswordRepository).clientId = "client_id"
+        (fakeForgetPasswordRepo as FakeForgetPasswordRepository).clientSecret = "client_secret"
 
         // When
         sut.sendForgetPasswordEmail(email)
 
         // Then
-        val result =  sut.forgetPasswordLiveData.getOrAwaitValue()
-        Truth.assertThat(result).isEqualTo(ResourceState.Success(success))
+        val result = sut.forgetPasswordLiveData.getOrAwaitValue()
+        assertThat(result).isEqualTo(ResourceState.Success(success))
     }
 }

@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.kks.nimbletest.data.network.ResourceState
 import com.kks.nimbletest.di.IoDispatcher
 import com.kks.nimbletest.repo.forget.ForgetPasswordRepo
+import com.kks.nimbletest.util.error_email_empty
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.collect
@@ -28,8 +29,13 @@ class ForgetPasswordViewModel @Inject constructor(
 
     fun sendForgetPasswordEmail(email: String) {
         viewModelScope.launch(ioDispatcher) {
-            homeRepo.sendForgetPasswordEmail(email).collect {
-                _forgetPasswordLiveData.postValue(it)
+            _forgetPasswordLiveData.postValue(ResourceState.Loading)
+            if (email.isEmpty()) {
+                _forgetPasswordLiveData.postValue(ResourceState.Error(error_email_empty))
+            } else {
+                homeRepo.sendForgetPasswordEmail(email).collect {
+                    _forgetPasswordLiveData.postValue(it)
+                }
             }
         }
     }
