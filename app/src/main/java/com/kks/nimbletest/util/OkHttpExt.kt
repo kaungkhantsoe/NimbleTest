@@ -16,11 +16,10 @@ fun <T> Call<T>.executeOrThrow(): T? {
         response = this.execute()
         if (response.isSuccessful.not()) {
             response.errorBody()?.let {
-                val errMsg = response.message()
                 val errCode = response.code()
                 if (errCode in 400..499)
                     throw HttpException(
-                        Response.error<BaseResponse<LoginResponse>>(
+                        Response.error<BaseResponse<T>>(
                             errCode,
                             it
                         )
