@@ -6,6 +6,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.kks.nimbletest.R
 import com.kks.nimbletest.data.network.reponse.SurveyResponse
+import com.kks.nimbletest.util.extensions.loadImage
 import com.kks.nimbletest.util.listeners.RecyclerViewItemClickListener
 
 /**
@@ -14,16 +15,13 @@ import com.kks.nimbletest.util.listeners.RecyclerViewItemClickListener
 
 class SurveyViewHolder(
     view: View,
-    private val recyclerViewItemClickListener: RecyclerViewItemClickListener,
-    private val requestManager: RequestManager,
+    private val recyclerViewItemClickListener: RecyclerViewItemClickListener
 ) : BaseViewHolder<SurveyResponse>(view) {
     lateinit var image: ImageView
 
     override fun onBindView(data: SurveyResponse) {
         image = itemView.findViewById(R.id.iv_survey)
-        requestManager
-            .load(data.attributes?.cover_image_url)
-            .into(image)
+        itemView.context.loadImage(data.attributes?.cover_image_url,image)
 
         itemView.setOnClickListener {
             recyclerViewItemClickListener.onItemClick(adapterPosition)

@@ -21,6 +21,7 @@ import com.kks.nimbletest.ui.login.LoginActivity
 import com.kks.nimbletest.util.DateUtil
 import com.kks.nimbletest.util.FadeInOutPageTransformer
 import com.kks.nimbletest.util.PreferenceManager
+import com.kks.nimbletest.util.extensions.loadImage
 import com.kks.nimbletest.util.listeners.RecyclerViewItemClickListener
 import com.kks.nimbletest.viewmodel.home.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,9 +34,6 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class HomeActivity : BaseViewBindingActivity<ActivityHomeBinding>(), RecyclerViewItemClickListener,
     KConnectionCheck.ConnectionStatusChangeListener {
-
-    @Inject
-    lateinit var requestManager: RequestManager
 
     @Inject
     lateinit var preferenceManager: PreferenceManager
@@ -105,7 +103,7 @@ class HomeActivity : BaseViewBindingActivity<ActivityHomeBinding>(), RecyclerVie
 
         binding.tvDate.text = DateUtil.getBeautifiedCurrentDate()
 
-        adapter = SurveyAdapter(this,requestManager)
+        adapter = SurveyAdapter(this)
         binding.vpSurveys.adapter = adapter
         binding.vpSurveys.setPageTransformer(FadeInOutPageTransformer())
         binding.vpSurveys.registerOnPageChangeCallback(onPageChangeCallback)
@@ -215,9 +213,7 @@ class HomeActivity : BaseViewBindingActivity<ActivityHomeBinding>(), RecyclerVie
         viewModel.userLiveData.observe(this) {
             when(it) {
                 is ResourceState.Success -> {
-                    requestManager
-                        .load(it.successData.attributes?.avatar_url)
-                        .into(binding.ivUser)
+                    loadImage(it.successData.attributes?.avatar_url,binding.ivUser)
                     changeErrorView(View.GONE)
                 }
                 is ResourceState.Error -> handleError(it.error)
