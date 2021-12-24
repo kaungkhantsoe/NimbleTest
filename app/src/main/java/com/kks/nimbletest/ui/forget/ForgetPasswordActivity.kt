@@ -1,18 +1,15 @@
 package com.kks.nimbletest.ui.forget
 
 import android.app.AlertDialog
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import androidx.appcompat.widget.Toolbar
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.kks.nimbletest.R
-import com.kks.nimbletest.constants.AppConstants
 import com.kks.nimbletest.data.network.ResourceState
 import com.kks.nimbletest.databinding.ActivityForgetPasswordBinding
 import com.kks.nimbletest.ui.base.BaseViewBindingActivity
-import com.kks.nimbletest.ui.login.LoginActivity
+import com.kks.nimbletest.util.NETWORK_ERROR
 import com.kks.nimbletest.util.extensions.hideKeyboard
 import com.kks.nimbletest.util.extensions.toast
 import com.kks.nimbletest.viewmodel.forget.ForgetPasswordViewModel
@@ -56,7 +53,7 @@ class ForgetPasswordActivity: BaseViewBindingActivity<ActivityForgetPasswordBind
                 }
                 is ResourceState.Error -> handleError(it.error)
                 is ResourceState.GenericError -> handleError(it.error)
-                ResourceState.NetworkError -> handleError(AppConstants.NETWORK_ERROR)
+                ResourceState.NetworkError -> handleError(NETWORK_ERROR)
                 is ResourceState.Success -> {
                     binding.spinKit.visibility = View.INVISIBLE
                     showDialog(it.successData)

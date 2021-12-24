@@ -1,7 +1,8 @@
 package com.kks.nimbletest.util.interceptors
 
-import com.kks.nimbletest.constants.PrefConstants
 import com.kks.nimbletest.repo.token.TokenRepoImpl
+import com.kks.nimbletest.util.PREF_ACCESS_TOKEN
+import com.kks.nimbletest.util.PREF_REFRESH_TOKEN
 import com.kks.nimbletest.util.PreferenceManager
 import dagger.Lazy
 import kotlinx.coroutines.CoroutineScope
@@ -34,13 +35,13 @@ class TokenAuthenticator(
             Check if request has header with accessToken
             Note:: AccessToken is already stored inside the preference when login
              */
-            if (!isRequestWithAccessToken(response) || preferenceManager.getStringData(PrefConstants.PREF_ACCESS_TOKEN) == null)
+            if (!isRequestWithAccessToken(response) || preferenceManager.getStringData(PREF_ACCESS_TOKEN) == null)
                 return null
 
             // Request new token with refreshToken
             val job = CoroutineScope(Dispatchers.IO).launch {
                 tokenRepo.get().refreshToken(
-                    preferenceManager.getStringData(PrefConstants.PREF_REFRESH_TOKEN) ?: ""
+                    preferenceManager.getStringData(PREF_REFRESH_TOKEN) ?: ""
                 ).collectLatest {
                     isRefreshed = true
                 }
@@ -52,7 +53,7 @@ class TokenAuthenticator(
                 }
                 isRefreshed = false
                 // Create new request with new accessToken fetched earlier
-                val newToken = preferenceManager.getStringData(PrefConstants.PREF_ACCESS_TOKEN)
+                val newToken = preferenceManager.getStringData(PREF_ACCESS_TOKEN)
                 job.cancel()
                 return response.request.newBuilder().header(
                     "Authorization",

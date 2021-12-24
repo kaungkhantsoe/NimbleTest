@@ -1,7 +1,8 @@
 package com.kks.nimbletest.util.interceptors
 
-import com.kks.nimbletest.constants.PrefConstants
 import com.kks.nimbletest.repo.token.TokenRepoImpl
+import com.kks.nimbletest.util.PREF_ACCESS_TOKEN
+import com.kks.nimbletest.util.PREF_REFRESH_TOKEN
 import com.kks.nimbletest.util.PreferenceManager
 import dagger.Lazy
 import kotlinx.coroutines.CoroutineScope
@@ -27,7 +28,7 @@ class CustomAccessTokenInterceptor(
     override fun intercept(chain: Interceptor.Chain): Response {
 
         val accessToken: String =
-            preferenceManager.getStringData(PrefConstants.PREF_ACCESS_TOKEN) ?: ""
+            preferenceManager.getStringData(PREF_ACCESS_TOKEN) ?: ""
         val request: Request = newRequestWithAccessToken(chain.request(), accessToken)
 
         val response: Response = chain.proceed(request)
@@ -35,7 +36,7 @@ class CustomAccessTokenInterceptor(
         if (response.code == HttpURLConnection.HTTP_UNAUTHORIZED) {
             val job = CoroutineScope(Dispatchers.IO).launch {
                 tokenRepo.get().refreshToken(
-                    preferenceManager.getStringData(PrefConstants.PREF_REFRESH_TOKEN) ?: ""
+                    preferenceManager.getStringData(PREF_REFRESH_TOKEN) ?: ""
                 ).collectLatest {
                     isRefreshed = true
                 }
@@ -47,7 +48,7 @@ class CustomAccessTokenInterceptor(
                 }
                 isRefreshed = false
                 val newAccessToken: String =
-                    preferenceManager.getStringData(PrefConstants.PREF_ACCESS_TOKEN) ?: ""
+                    preferenceManager.getStringData(PREF_ACCESS_TOKEN) ?: ""
                 job.cancel()
                 // Access token is refreshed in another thread.
                 if (accessToken != newAccessToken) {

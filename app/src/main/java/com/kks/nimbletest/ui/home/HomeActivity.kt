@@ -7,11 +7,9 @@ import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.SCROLL_STATE_IDLE
-import com.bumptech.glide.RequestManager
 import com.kks.kconnectioncheck.KConnectionCheck
 import com.kks.nimbletest.R
 import com.kks.nimbletest.adapter.SurveyAdapter
-import com.kks.nimbletest.constants.AppConstants
 import com.kks.nimbletest.data.network.ResourceState
 import com.kks.nimbletest.data.network.reponse.SurveyResponse
 import com.kks.nimbletest.databinding.ActivityHomeBinding
@@ -20,6 +18,7 @@ import com.kks.nimbletest.ui.detail.SurveyDetailActivity
 import com.kks.nimbletest.ui.login.LoginActivity
 import com.kks.nimbletest.util.DateUtil
 import com.kks.nimbletest.util.FadeInOutPageTransformer
+import com.kks.nimbletest.util.NETWORK_ERROR
 import com.kks.nimbletest.util.PreferenceManager
 import com.kks.nimbletest.util.extensions.loadImage
 import com.kks.nimbletest.util.listeners.RecyclerViewItemClickListener
@@ -114,7 +113,7 @@ class HomeActivity : BaseViewBindingActivity<ActivityHomeBinding>(), RecyclerVie
         observeUserDetail()
         viewModel.getUserDetail()
 
-        KConnectionCheck.addConnectionCheck(this, this, this);
+        KConnectionCheck.addConnectionCheck(this, this, this)
     }
 
     private fun updateTexts(position: Int) {
@@ -175,7 +174,7 @@ class HomeActivity : BaseViewBindingActivity<ActivityHomeBinding>(), RecyclerVie
                     binding.swipeRefresh.isRefreshing = false
                 }
                 ResourceState.NetworkError -> {
-                    handleError(AppConstants.NETWORK_ERROR)
+                    handleError(NETWORK_ERROR)
                     binding.swipeRefresh.isRefreshing = false
                 }
                 ResourceState.Loading -> {
@@ -201,7 +200,7 @@ class HomeActivity : BaseViewBindingActivity<ActivityHomeBinding>(), RecyclerVie
             .setMessage(getString(R.string.txt_session_is_expired))
             .setCancelable(false)
             .setPositiveButton(android.R.string.ok
-            ) { dialog, id ->
+            ) { _, _ ->
                 preferenceManager.deleteAllData()
                 startActivity(Intent(this@HomeActivity,LoginActivity::class.java))
                 finish()
@@ -213,12 +212,12 @@ class HomeActivity : BaseViewBindingActivity<ActivityHomeBinding>(), RecyclerVie
         viewModel.userLiveData.observe(this) {
             when(it) {
                 is ResourceState.Success -> {
-                    loadImage(it.successData.attributes?.avatar_url,binding.ivUser)
+                    loadImage(it.successData.attributes?.avatarUrl,binding.ivUser)
                     changeErrorView(View.GONE)
                 }
                 is ResourceState.Error -> handleError(it.error)
                 is ResourceState.GenericError -> handleError(it.error)
-                ResourceState.NetworkError -> handleError(AppConstants.NETWORK_ERROR)
+                ResourceState.NetworkError -> handleError(NETWORK_ERROR)
                 else -> {}
             }
         }

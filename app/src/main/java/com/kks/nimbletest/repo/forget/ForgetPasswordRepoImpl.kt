@@ -1,12 +1,10 @@
 package com.kks.nimbletest.repo.forget
 
-import com.kks.nimbletest.constants.AppConstants
 import com.kks.nimbletest.data.network.ApiInterface
 import com.kks.nimbletest.data.network.ResourceState
 import com.kks.nimbletest.data.network.request.ForgetPasswordRequest
 import com.kks.nimbletest.data.network.request.ForgetPasswordUserRequest
-import com.kks.nimbletest.util.CustomKeyProvider
-import com.kks.nimbletest.util.executeOrThrow
+import com.kks.nimbletest.util.*
 import com.kks.nimbletest.util.extensions.safeApiCall
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -28,7 +26,7 @@ class ForgetPasswordRepoImpl @Inject constructor(
             emit(ResourceState.Loading)
 
             if (email.isEmpty()) {
-                emit(ResourceState.Error(AppConstants.error_email_empty))
+                emit(ResourceState.Error(error_email_empty))
             }
 
             val apiResult = safeApiCall(Dispatchers.IO) {
@@ -48,7 +46,7 @@ class ForgetPasswordRepoImpl @Inject constructor(
                 is ResourceState.Success -> {
                     apiResult.successData?.meta?.message?.let {
                         emit(ResourceState.Success(it))
-                    } ?: emit(ResourceState.Success(AppConstants.success))
+                    } ?: emit(ResourceState.Success(success))
                 }
 
                 ResourceState.ProtocolError -> emit(ResourceState.ProtocolError)
@@ -65,6 +63,6 @@ class ForgetPasswordRepoImpl @Inject constructor(
                 }
             }
         }.catch { error ->
-            emit(ResourceState.Error(error.message ?: AppConstants.UNKNOWN_ERROR_MESSAGE))
+            emit(ResourceState.Error(error.message ?: UNKNOWN_ERROR_MESSAGE))
         }
 }

@@ -5,6 +5,10 @@ import android.content.SharedPreferences
 import com.google.gson.Gson
 import com.kks.nimbletest.R
 
+const val PREF_ACCESS_TOKEN = "access_token"
+const val PREF_REFRESH_TOKEN = "refresh_token"
+const val PREF_LOGGED_IN = "logged_in"
+
 class PreferenceManager(context: Context) {
     private val preferences: SharedPreferences =
         context.getSharedPreferences("pref_${context.getString(R.string.app_name)}", Context.MODE_PRIVATE)

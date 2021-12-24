@@ -3,12 +3,13 @@ package com.kks.nimbletest.repo.forget
 import com.google.common.truth.Truth.assertThat
 import com.kks.nimbletest.FakeCustomKeyGenerator
 import com.kks.nimbletest.TestConstants
-import com.kks.nimbletest.constants.AppConstants
 import com.kks.nimbletest.data.network.ApiInterface
 import com.kks.nimbletest.data.network.ResourceState
 import com.kks.nimbletest.data.network.reponse.BaseResponse
 import com.kks.nimbletest.util.MockResponseFileReader
 import com.kks.nimbletest.util.MockitoHelper
+import com.kks.nimbletest.util.error_email_empty
+import com.kks.nimbletest.util.success
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -48,7 +49,7 @@ class ForgetPasswordRepoImplTest {
             val secondResult = sut.sendForgetPasswordEmail(email).drop(1).first()
 
             // Then
-            assertThat((secondResult as ResourceState.Error).error).isEqualTo(AppConstants.error_email_empty)
+            assertThat((secondResult as ResourceState.Error).error).isEqualTo(error_email_empty)
         }
     }
 
@@ -87,7 +88,7 @@ class ForgetPasswordRepoImplTest {
                 .drop(1).first()
 
             // Then
-            assertThat(secondResult).isEqualTo(ResourceState.Success(AppConstants.success))
+            assertThat(secondResult).isEqualTo(ResourceState.Success(success))
         }
     }
 }

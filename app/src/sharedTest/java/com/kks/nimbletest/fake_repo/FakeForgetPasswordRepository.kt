@@ -1,9 +1,9 @@
 package com.kks.nimbletest.fake_repo
 
-import com.kks.nimbletest.TestConstants
-import com.kks.nimbletest.constants.AppConstants
 import com.kks.nimbletest.data.network.ResourceState
 import com.kks.nimbletest.repo.forget.ForgetPasswordRepo
+import com.kks.nimbletest.util.error_email_empty
+import com.kks.nimbletest.util.success
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
@@ -23,8 +23,8 @@ class FakeForgetPasswordRepository: ForgetPasswordRepo {
             if (client_id.isEmpty() || client_secret.isEmpty())
                 emit(ResourceState.GenericError(403,"invalid_client"))
             else if (email.isEmpty())
-                emit(ResourceState.Error(AppConstants.error_email_empty))
+                emit(ResourceState.Error(error_email_empty))
             else
-                emit(ResourceState.Success(AppConstants.success))
+                emit(ResourceState.Success(success))
         }
 }

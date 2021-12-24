@@ -1,14 +1,10 @@
 package com.kks.nimbletest.repo.token
 
-import com.kks.nimbletest.constants.AppConstants
-import com.kks.nimbletest.constants.PrefConstants
 import com.kks.nimbletest.data.network.ApiInterface
 import com.kks.nimbletest.data.network.ResourceState
 import com.kks.nimbletest.data.network.reponse.LoginResponse
 import com.kks.nimbletest.data.network.request.RefreshTokenRequest
-import com.kks.nimbletest.util.CustomKeyProvider
-import com.kks.nimbletest.util.PreferenceManager
-import com.kks.nimbletest.util.executeOrThrow
+import com.kks.nimbletest.util.*
 import com.kks.nimbletest.util.extensions.safeApiCall
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -34,9 +30,9 @@ class TokenRepoImpl @Inject constructor(
             val apiResult = safeApiCall(Dispatchers.IO) {
                 apiInterface.refreshToken(
                     RefreshTokenRequest(
-                        refresh_token = refreshToken,
-                        client_id = customKeyProvider.getClientId(),
-                        client_secret = customKeyProvider.getClientSecret()
+                        refreshToken = refreshToken,
+                        clientId = customKeyProvider.getClientId(),
+                        clientSecret = customKeyProvider.getClientSecret()
                     )
                 ).executeOrThrow()
             }
@@ -45,15 +41,15 @@ class TokenRepoImpl @Inject constructor(
                 is ResourceState.Success -> {
                     apiResult.successData?.data?.attributes?.let { response ->
                         preferenceManager.setStringData(
-                            PrefConstants.PREF_ACCESS_TOKEN,
-                            response.access_token ?: ""
+                            PREF_ACCESS_TOKEN,
+                            response.accessToken ?: ""
                         )
                         preferenceManager.setStringData(
-                            PrefConstants.PREF_REFRESH_TOKEN,
-                            response.refresh_token ?: ""
+                            PREF_REFRESH_TOKEN,
+                            response.refreshToken ?: ""
                         )
                         emit(ResourceState.Success(apiResult.successData.data))
-                    } ?: emit(ResourceState.Error(AppConstants.SUCCESS_WITH_NULL_ERROR))
+                    } ?: emit(ResourceState.Error(SUCCESS_WITH_NULL_ERROR))
                 }
                 is ResourceState.Error -> {
                     emit(ResourceState.Error(apiResult.error))
@@ -74,6 +70,6 @@ class TokenRepoImpl @Inject constructor(
                 else -> {emit(ResourceState.NetworkError)}
             }
         }.catch { error ->
-            emit(ResourceState.Error(error.message ?: AppConstants.UNKNOWN_ERROR_MESSAGE))
+            emit(ResourceState.Error(error.message ?: UNKNOWN_ERROR_MESSAGE))
         }
 }
