@@ -9,6 +9,7 @@ import com.kks.nimbletest.util.CustomKeyGenerator
 import com.kks.nimbletest.util.PreferenceManager
 import com.kks.nimbletest.util.interceptors.CustomAccessTokenInterceptor
 import com.kks.nimbletest.util.interceptors.TokenAuthenticator
+import dagger.Lazy
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -46,14 +47,15 @@ object NetworkModule {
     @Singleton
     @Provides
     fun provideOkHttpClient(
-        @ApplicationContext appContext: Context,
-        loggingInterceptor: HttpLoggingInterceptor
+        loggingInterceptor: HttpLoggingInterceptor,
+        preferenceManager: PreferenceManager,
+        tokenRepo: Lazy<TokenRepoImpl>,
     ): OkHttpClient {
         return OkHttpClient().newBuilder()
             .connectTimeout(15, TimeUnit.SECONDS)
             .readTimeout(15, TimeUnit.SECONDS)
-            .addInterceptor(CustomAccessTokenInterceptor(appContext))
-            .authenticator(TokenAuthenticator(appContext)) /* Refresh token interceptor */
+            .addInterceptor(CustomAccessTokenInterceptor(preferenceManager,tokenRepo))
+            .authenticator(TokenAuthenticator(preferenceManager,tokenRepo)) /* Refresh token interceptor */
             .addInterceptor(loggingInterceptor)
             .build()
     }

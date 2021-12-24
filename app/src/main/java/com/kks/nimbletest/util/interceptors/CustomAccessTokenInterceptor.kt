@@ -1,14 +1,9 @@
 package com.kks.nimbletest.util.interceptors
 
-import android.content.Context
 import com.kks.nimbletest.constants.PrefConstants
-import com.kks.nimbletest.repo.token.TokenRepo
 import com.kks.nimbletest.repo.token.TokenRepoImpl
 import com.kks.nimbletest.util.PreferenceManager
-import dagger.hilt.EntryPoint
-import dagger.hilt.InstallIn
-import dagger.hilt.android.EntryPointAccessors
-import dagger.hilt.components.SingletonComponent
+import dagger.Lazy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
@@ -22,30 +17,14 @@ import java.net.HttpURLConnection
  * Created by kaungkhantsoe at 21/12/2021
  */
 
-class CustomAccessTokenInterceptor(private val context: Context) : Interceptor {
-
-    lateinit var preferenceManager: PreferenceManager
-
-    lateinit var tokenRepo: TokenRepoImpl
+class CustomAccessTokenInterceptor(
+    private val preferenceManager: PreferenceManager,
+    private val tokenRepo: Lazy<TokenRepoImpl>
+) : Interceptor {
 
     private var isRefreshed = false
 
-    @EntryPoint
-    @InstallIn(SingletonComponent::class)
-    interface TokenAuthenticatorEntryPoint {
-        fun preferenceManager(): PreferenceManager
-        fun tokenRepo(): TokenRepoImpl
-    }
-
     override fun intercept(chain: Interceptor.Chain): Response {
-
-        val entryPoint = EntryPointAccessors.fromApplication(
-            context,
-            TokenAuthenticator.TokenAuthenticatorEntryPoint::class.java
-        )
-
-        preferenceManager = entryPoint.preferenceManager()
-        tokenRepo = entryPoint.tokenRepo()
 
         val accessToken: String =
             preferenceManager.getStringData(PrefConstants.PREF_ACCESS_TOKEN) ?: ""
@@ -55,7 +34,7 @@ class CustomAccessTokenInterceptor(private val context: Context) : Interceptor {
 
         if (response.code == HttpURLConnection.HTTP_UNAUTHORIZED) {
             val job = CoroutineScope(Dispatchers.IO).launch {
-                tokenRepo.refreshToken(
+                tokenRepo.get().refreshToken(
                     preferenceManager.getStringData(PrefConstants.PREF_REFRESH_TOKEN) ?: ""
                 ).collectLatest {
                     isRefreshed = true
