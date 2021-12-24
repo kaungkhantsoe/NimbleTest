@@ -13,13 +13,11 @@ import com.kks.nimbletest.util.listeners.RecyclerViewItemClickListener
  */
 
 class SurveyAdapter(
-    private val recyclerViewItemClickListener: RecyclerViewItemClickListener,
-    private val requestManager: RequestManager
+    private val recyclerViewItemClickListener: RecyclerViewItemClickListener
 ) : BaseRecyclerAdapter<SurveyViewHolder, SurveyResponse>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SurveyViewHolder =
         SurveyViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.item_survey, parent, false),
-            recyclerViewItemClickListener,
-            requestManager
+            recyclerViewItemClickListener
         )
 }
