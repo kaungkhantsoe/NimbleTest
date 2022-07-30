@@ -7,10 +7,6 @@ on:
       - edited
       - reopened
       - synchronize
-    branches:
-      - 'feature/**'
-      - 'bug/**'
-      - 'chore/**'
 
 jobs:
   review_pull_request_job:
