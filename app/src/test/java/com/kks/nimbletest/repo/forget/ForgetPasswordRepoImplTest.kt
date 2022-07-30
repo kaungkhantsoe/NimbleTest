@@ -53,7 +53,7 @@ class ForgetPasswordRepoImplTest {
             val result = sut.sendForgetPasswordEmail(email).take(1).first()
 
             // Then
-            assertThat(result).isEqualTo(ResourceState.GenericError(403,"invalid_client"))
+            assertThat(result).isEqualTo(ResourceState.GenericError(403,"invalid_clientt"))
         }
     }
 
