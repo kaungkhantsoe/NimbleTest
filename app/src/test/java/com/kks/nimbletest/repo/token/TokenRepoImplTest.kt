@@ -2,12 +2,12 @@ package com.kks.nimbletest.repo.token
 
 import com.google.common.truth.Truth.assertThat
 import com.kks.nimbletest.FakeCustomKeyGenerator
-import com.kks.nimbletest.util.MockResponseFileReader
 import com.kks.nimbletest.TestConstants
 import com.kks.nimbletest.data.network.ApiInterface
 import com.kks.nimbletest.data.network.ResourceState
 import com.kks.nimbletest.data.network.reponse.BaseResponse
 import com.kks.nimbletest.data.network.reponse.LoginResponse
+import com.kks.nimbletest.util.MockResponseFileReader
 import com.kks.nimbletest.util.PreferenceManager
 import io.mockk.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -37,7 +37,6 @@ class TokenRepoImplTest {
 
     @After
     fun tearDown() {
-
     }
 
     @Test
@@ -83,7 +82,6 @@ class TokenRepoImplTest {
             // Verify mock function is not called
             assertThat(result is ResourceState.GenericError).isTrue()
             verify(inverse = true) { preferenceManager.setStringData(any(), any()) }
-
         }
     }
 

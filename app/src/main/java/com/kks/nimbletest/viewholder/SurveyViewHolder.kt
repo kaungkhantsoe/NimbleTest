@@ -19,7 +19,7 @@ class SurveyViewHolder(
 
     override fun onBindView(data: SurveyResponse) {
         image = itemView.findViewById(R.id.iv_survey)
-        itemView.context.loadImage(data.attributes?.coverImageUrl,image)
+        itemView.context.loadImage(data.attributes?.coverImageUrl, image)
 
         itemView.setOnClickListener {
             recyclerViewItemClickListener.onItemClick(adapterPosition)

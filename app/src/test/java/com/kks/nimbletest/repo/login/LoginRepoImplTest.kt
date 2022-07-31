@@ -2,13 +2,13 @@ package com.kks.nimbletest.repo.login
 
 import com.google.common.truth.Truth.assertThat
 import com.kks.nimbletest.FakeCustomKeyGenerator
-import com.kks.nimbletest.util.MockResponseFileReader
-import com.kks.nimbletest.util.MockitoHelper.anyObject
 import com.kks.nimbletest.TestConstants
 import com.kks.nimbletest.data.network.ApiInterface
 import com.kks.nimbletest.data.network.ResourceState
 import com.kks.nimbletest.data.network.reponse.BaseResponse
 import com.kks.nimbletest.data.network.reponse.LoginResponse
+import com.kks.nimbletest.util.MockResponseFileReader
+import com.kks.nimbletest.util.MockitoHelper.anyObject
 import com.kks.nimbletest.util.PreferenceManager
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
@@ -61,7 +61,7 @@ class LoginRepoImplTest {
             val result = sut.loginWithEmailAndPassword(email, password).take(1).first()
 
             // Then
-            assertThat(result).isEqualTo(ResourceState.GenericError(400,"invalid_grant"))
+            assertThat(result).isEqualTo(ResourceState.GenericError(400, "invalid_grant"))
         }
     }
 
@@ -80,8 +80,7 @@ class LoginRepoImplTest {
             val result = sut.loginWithEmailAndPassword(email, password).take(1).first()
 
             // Then
-            assertThat(result).isEqualTo(ResourceState.GenericError(400,"invalid_grant"))
-
+            assertThat(result).isEqualTo(ResourceState.GenericError(400, "invalid_grant"))
         }
     }
 
@@ -100,7 +99,7 @@ class LoginRepoImplTest {
             val result = sut.loginWithEmailAndPassword(email, password).take(1).first()
 
             // Then
-            assertThat(result).isEqualTo(ResourceState.GenericError(403,"invalid_client"))
+            assertThat(result).isEqualTo(ResourceState.GenericError(403, "invalid_client"))
         }
     }
 

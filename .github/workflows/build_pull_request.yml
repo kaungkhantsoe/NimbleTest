@@ -32,5 +32,15 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      - name: Run debug test
-        run: ./gradlew testDevDebugUnitTest --continue
+# Don't run this anymore since we run Jacoco
+#      - name: Run debug test
+#        run: ./gradlew testDevDebugUnitTest --continue
+
+      - name: Run detekt
+        run: ./gradlew detekt
+
+      - name: Run lint
+        run: ./gradlew lint
+
+      - name: Run unit test and Jacoco Coverage
+        run: ./gradlew :app:testDevDebugUnitTestCoverage --continue

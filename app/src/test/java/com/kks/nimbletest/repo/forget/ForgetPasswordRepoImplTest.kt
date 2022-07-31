@@ -8,7 +8,6 @@ import com.kks.nimbletest.data.network.ResourceState
 import com.kks.nimbletest.data.network.reponse.BaseResponse
 import com.kks.nimbletest.util.MockResponseFileReader
 import com.kks.nimbletest.util.MockitoHelper
-import com.kks.nimbletest.util.error_email_empty
 import com.kks.nimbletest.util.success
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.take
@@ -21,7 +20,6 @@ import org.mockito.Mockito.mock
 import retrofit2.Response
 import retrofit2.mock.Calls
 
-
 class ForgetPasswordRepoImplTest {
 
     private lateinit var apiInterface: ApiInterface
@@ -31,13 +29,11 @@ class ForgetPasswordRepoImplTest {
     @Before
     fun setup() {
         apiInterface = mock(ApiInterface::class.java)
-        sut = ForgetPasswordRepoImpl(apiInterface,FakeCustomKeyGenerator())
+        sut = ForgetPasswordRepoImpl(apiInterface, FakeCustomKeyGenerator())
     }
 
     @After
-    fun tearDown() {
-
-    }
+    fun tearDown() {}
 
     @Test
     fun `send forget password with invalid client_secret or client_id, return error`() {
@@ -45,7 +41,8 @@ class ForgetPasswordRepoImplTest {
             // Given
             val responseBody = MockResponseFileReader("forget_password_invalid_client.json").asResponseBody
             val response = Response.error<BaseResponse<String?>>(403, responseBody)
-            Mockito.`when`(apiInterface.sendForgetPasswordMail(MockitoHelper.anyObject())).thenReturn(Calls.response(response))
+            Mockito.`when`(apiInterface.sendForgetPasswordMail(MockitoHelper.anyObject()))
+                .thenReturn(Calls.response(response))
 
             val email = "my@gmail.com"
 
@@ -53,7 +50,7 @@ class ForgetPasswordRepoImplTest {
             val result = sut.sendForgetPasswordEmail(email).take(1).first()
 
             // Then
-            assertThat(result).isEqualTo(ResourceState.GenericError(403,"invalid_client"))
+            assertThat(result).isEqualTo(ResourceState.GenericError(403, "invalid_client"))
         }
     }
 
@@ -65,7 +62,8 @@ class ForgetPasswordRepoImplTest {
                 200,
                 TestConstants.baseForgetPasswordResponse
             )
-            Mockito.`when`(apiInterface.sendForgetPasswordMail(MockitoHelper.anyObject())).thenReturn(Calls.response(response))
+            Mockito.`when`(apiInterface.sendForgetPasswordMail(MockitoHelper.anyObject()))
+                .thenReturn(Calls.response(response))
 
             val email = "my@gmail.com"
 

@@ -8,7 +8,6 @@ import com.kks.nimbletest.data.network.reponse.BaseResponse
 import com.kks.nimbletest.data.network.reponse.SurveyResponse
 import com.kks.nimbletest.util.MockResponseFileReader
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.runBlocking
@@ -18,7 +17,6 @@ import org.junit.Test
 import org.mockito.Mockito.*
 import retrofit2.Response
 import retrofit2.mock.Calls
-
 
 @ExperimentalCoroutinesApi
 class HomeRepoImplTest {
@@ -35,7 +33,7 @@ class HomeRepoImplTest {
 
     @After
     fun tearDown() {
-
+        // Do nothing
     }
 
     @Test

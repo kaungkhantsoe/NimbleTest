@@ -51,7 +51,6 @@ class LoginRepoImpl @Inject constructor(
                             loginResponse.attributes?.refreshToken ?: ""
                         )
                         emit(ResourceState.Success(loginResponse))
-
                     } ?: emit(ResourceState.Error(SUCCESS_WITH_NULL_ERROR))
                 }
                 is ResourceState.Error -> emit(ResourceState.Error(apiResult.error))

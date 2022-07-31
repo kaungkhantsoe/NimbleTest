@@ -28,12 +28,11 @@ class HomeViewModelTest {
     @Before
     fun setup() {
         homeRepo = FakeHomeRepository()
-        sut = HomeViewModel(homeRepo,testCoroutineDispatcher)
+        sut = HomeViewModel(homeRepo, testCoroutineDispatcher)
     }
 
     @After
     fun tearDown() {
-
     }
 
     @Test
@@ -43,11 +42,11 @@ class HomeViewModelTest {
         val pageSize = -1
 
         // When
-        sut.getSurveyList(pageNumber,pageSize)
+        sut.getSurveyList(pageNumber, pageSize)
 
         // Then
         val result = sut.surveyListLiveData.getOrAwaitValue()
-        assertThat(result).isEqualTo(ResourceState.GenericError(404,null))
+        assertThat(result).isEqualTo(ResourceState.GenericError(404, null))
     }
 
     @Test
@@ -57,7 +56,7 @@ class HomeViewModelTest {
         val pageSize = 1
 
         // When
-        sut.getSurveyList(pageNumber,pageSize)
+        sut.getSurveyList(pageNumber, pageSize)
 
         // Then
         val result = sut.surveyListLiveData.getOrAwaitValue()

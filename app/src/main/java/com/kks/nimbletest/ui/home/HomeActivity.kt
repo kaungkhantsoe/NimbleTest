@@ -16,10 +16,7 @@ import com.kks.nimbletest.databinding.ActivityHomeBinding
 import com.kks.nimbletest.ui.base.BaseViewBindingActivity
 import com.kks.nimbletest.ui.detail.SurveyDetailActivity
 import com.kks.nimbletest.ui.login.LoginActivity
-import com.kks.nimbletest.util.DateUtil
-import com.kks.nimbletest.util.FadeInOutPageTransformer
-import com.kks.nimbletest.util.NETWORK_ERROR
-import com.kks.nimbletest.util.PreferenceManager
+import com.kks.nimbletest.util.*
 import com.kks.nimbletest.util.extensions.loadImage
 import com.kks.nimbletest.util.listeners.RecyclerViewItemClickListener
 import com.kks.nimbletest.viewmodel.home.HomeViewModel
@@ -31,7 +28,9 @@ import javax.inject.Inject
  */
 
 @AndroidEntryPoint
-class HomeActivity : BaseViewBindingActivity<ActivityHomeBinding>(), RecyclerViewItemClickListener,
+class HomeActivity :
+    BaseViewBindingActivity<ActivityHomeBinding>(),
+    RecyclerViewItemClickListener,
     KConnectionCheck.ConnectionStatusChangeListener {
 
     @Inject
@@ -59,7 +58,7 @@ class HomeActivity : BaseViewBindingActivity<ActivityHomeBinding>(), RecyclerVie
             if (state == SCROLL_STATE_IDLE) {
                 binding.swipeRefresh.isEnabled = true
                 binding.dotsIndicator.selection = mPosition
-                if (!isLoading && mPosition == surveyList.size-1 && !endOfList) {
+                if (!isLoading && mPosition == surveyList.size - 1 && !endOfList) {
                     pageNumber++
                     getSurveyList(pageNumber)
                 }
@@ -155,7 +154,7 @@ class HomeActivity : BaseViewBindingActivity<ActivityHomeBinding>(), RecyclerVie
 
                     if (surveyList.size > 0) {
                         binding.dotsIndicator.count = surveyList.size
-                        if(pageNumber == 1)
+                        if (pageNumber == 1)
                             updateTexts(0)
                     }
                     binding.swipeRefresh.isRefreshing = false
@@ -167,7 +166,7 @@ class HomeActivity : BaseViewBindingActivity<ActivityHomeBinding>(), RecyclerVie
                     binding.swipeRefresh.isRefreshing = false
                 }
                 is ResourceState.GenericError -> {
-                    if (pageNumber > 1 && it.code == 404)
+                    if (pageNumber > 1 && it.code == ERROR_CODE_404)
                         endOfList = true
                     else
                         handleError(it.error)
@@ -195,14 +194,15 @@ class HomeActivity : BaseViewBindingActivity<ActivityHomeBinding>(), RecyclerVie
     }
 
     private fun showSessionExpire() {
-        //Too many follow-up requests error was thrown
+        // Too many follow-up requests error was thrown
         AlertDialog.Builder(this)
             .setMessage(getString(R.string.txt_session_is_expired))
             .setCancelable(false)
-            .setPositiveButton(android.R.string.ok
+            .setPositiveButton(
+                android.R.string.ok
             ) { _, _ ->
                 preferenceManager.deleteAllData()
-                startActivity(Intent(this@HomeActivity,LoginActivity::class.java))
+                startActivity(Intent(this@HomeActivity, LoginActivity::class.java))
                 finish()
             }
             .show()
@@ -210,9 +210,9 @@ class HomeActivity : BaseViewBindingActivity<ActivityHomeBinding>(), RecyclerVie
 
     private fun observeUserDetail() {
         viewModel.userLiveData.observe(this) {
-            when(it) {
+            when (it) {
                 is ResourceState.Success -> {
-                    loadImage(it.successData.attributes?.avatarUrl,binding.ivUser)
+                    loadImage(it.successData.attributes?.avatarUrl, binding.ivUser)
                     changeErrorView(View.GONE)
                 }
                 is ResourceState.Error -> handleError(it.error)
@@ -256,6 +256,5 @@ class HomeActivity : BaseViewBindingActivity<ActivityHomeBinding>(), RecyclerVie
     }
 
     override fun onConnectionStatusChange(status: Boolean) {
-
     }
 }

@@ -35,7 +35,6 @@ class ForgetPasswordViewModelTest {
 
     @After
     fun tearDown() {
-
     }
 
     @Test
@@ -51,7 +50,6 @@ class ForgetPasswordViewModelTest {
         // Then
         val result = sut.forgetPasswordLiveData.getOrAwaitValue()
         assertThat((result as ResourceState.Error).error).isEqualTo(error_email_empty)
-
     }
 
     @Test
