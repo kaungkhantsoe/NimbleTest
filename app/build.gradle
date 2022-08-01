@@ -5,7 +5,6 @@ plugins {
     id 'dagger.hilt.android.plugin'
 }
 apply from: "$project.rootDir/config/jacoco.gradle"
-apply from: "$project.rootDir/config/detekt.gradle"
 
 android {
     compileSdk 31
@@ -143,8 +142,6 @@ dependencies {
 
     // Connection Check
     implementation "com.github.kaungkhantsoe:KConnectionCheckKotlin:$kconnection_version"
-
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.21.0")
 
     //
     // --------------------------- Unit Test ---------------------------

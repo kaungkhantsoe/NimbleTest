@@ -1,0 +1,40 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues></ManuallySuppressedIssues>
+  <CurrentIssues>
+    <ID>ConstructorParameterNaming:MetaResponse.kt$MetaResponse$val page_size: Int?</ID>
+    <ID>ImplicitDefaultLocale:NimbleApp.kt$NimbleApp.&lt;no name provided&gt;$String.format( "Class:%s: Line: %s, Method: %s", super.createStackElementTag(element), element.lineNumber, element.methodName )</ID>
+    <ID>MagicNumber:NetworkExtension.kt$7000</ID>
+    <ID>MagicNumber:NetworkModule.kt$NetworkModule$15</ID>
+    <ID>MagicNumber:OkHttpExt.kt$400</ID>
+    <ID>MagicNumber:OkHttpExt.kt$499</ID>
+    <ID>MagicNumber:SplashActivity.kt$SplashActivity$1000</ID>
+    <ID>MagicNumber:SplashActivity.kt$SplashActivity.&lt;no name provided&gt;$100</ID>
+    <ID>MagicNumber:SplashActivity.kt$SplashActivity.&lt;no name provided&gt;$1500</ID>
+    <ID>NestedBlockDepth:NetworkExtension.kt$private fun convertErrorBody(throwable: HttpException): String?</ID>
+    <ID>NestedBlockDepth:OkHttpExt.kt$fun &lt;T&gt; Call&lt;T&gt;.executeOrThrow(): T?</ID>
+    <ID>PrintStackTrace:TokenAuthenticator.kt$TokenAuthenticator$e</ID>
+    <ID>RethrowCaughtException:OkHttpExt.kt$throw e</ID>
+    <ID>RethrowCaughtException:OkHttpExt.kt$throw unknownHostException</ID>
+    <ID>ReturnCount:NetworkExtension.kt$private fun convertErrorBody(throwable: HttpException): String?</ID>
+    <ID>ReturnCount:TokenAuthenticator.kt$TokenAuthenticator$override fun authenticate(route: Route?, response: Response): Request?</ID>
+    <ID>SwallowedException:NetworkExtension.kt$exception: Exception</ID>
+    <ID>SwallowedException:OkHttpExt.kt$httpException: HttpException</ID>
+    <ID>ThrowsCount:OkHttpExt.kt$fun &lt;T&gt; Call&lt;T&gt;.executeOrThrow(): T?</ID>
+    <ID>TooGenericExceptionCaught:NetworkExtension.kt$exception: Exception</ID>
+    <ID>TooGenericExceptionCaught:NetworkExtension.kt$throwable: Throwable</ID>
+    <ID>TooGenericExceptionCaught:OkHttpExt.kt$e: Exception</ID>
+    <ID>TooGenericExceptionCaught:TokenAuthenticator.kt$TokenAuthenticator$e: Exception</ID>
+    <ID>TooGenericExceptionThrown:OkHttpExt.kt$throw Exception(UNKNOWN_ERROR)</ID>
+    <ID>TooGenericExceptionThrown:OkHttpExt.kt$throw Exception(code)</ID>
+    <ID>TopLevelPropertyNaming:DateUtil.kt$/** * Created by kaungkhantsoe at 21/12/2021 */ const val EEEE_comma_MMMMM_d_format = "EEEE,MMMM d"</ID>
+    <ID>TopLevelPropertyNaming:OkHttpExt.kt$const val error_email_empty = "Email cannot be empty"</ID>
+    <ID>TopLevelPropertyNaming:OkHttpExt.kt$const val error_password_empty = "Password cannot be empty"</ID>
+    <ID>TopLevelPropertyNaming:OkHttpExt.kt$const val success = "success"</ID>
+    <ID>UnusedPrivateMember:BaseResponse.kt$BaseResponse$meta: MetaResponse? = null</ID>
+    <ID>UnusedPrivateMember:CustomKeyGenerator.kt$CustomKeyGenerator$private external fun decryptAlgorithm(): String</ID>
+    <ID>UnusedPrivateMember:CustomKeyGenerator.kt$CustomKeyGenerator$private external fun decryptIVKey(): String</ID>
+    <ID>UnusedPrivateMember:CustomKeyGenerator.kt$CustomKeyGenerator$private external fun decryptSecreteKey(): String</ID>
+    <ID>UnusedPrivateMember:CustomKeyGenerator.kt$CustomKeyGenerator$private external fun decryptTransformation(): String</ID>
+  </CurrentIssues>
+</SmellBaseline>

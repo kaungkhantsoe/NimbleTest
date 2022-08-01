@@ -1,13 +1,52 @@
 apply plugin: "io.gitlab.arturbosch.detekt"
 
+// https://detekt.dev/docs/gettingstarted/gradle
 detekt {
     autoCorrect = true
-    config = files("${rootProject.projectDir}/config/detekt/detekt.yml")
+    config = files("${rootDir}/config/detekt/detekt.yml")
     source = files("app/src/main/java")
 
+    baseline = file("$rootDir/detekt-baseline.xml")
+
+    // Android: Don't create tasks for the specified build types (e.g. "release")
+    ignoredBuildTypes = ["release"]
+
+    // Android: Don't create tasks for the specified build flavor (e.g. "production")
+    ignoredFlavors = ["prod"]
+
+    // Android: Don't create tasks for the specified build variants (e.g. "productionRelease")
+    ignoredVariants = ["prodRelease"]
+
+    // Specify the base path for file paths in the formatted reports.
+    // If not set, all file paths reported will be absolute file path.
+    basePath = rootDir
+}
+
+tasks.named("detekt").configure {
     reports {
-        html.enabled = true
-        xml.enabled = true
-        txt.enabled = true
+        // Enable/Disable XML report (default: true)
+        xml.required.set(true)
+        xml.outputLocation.set(file("build/reports/detekt/detekt-result.xml"))
+        // Enable/Disable HTML report (default: true)
+        html.required.set(true)
+        html.outputLocation.set(file("build/reports/detekt/detekt-result.html"))
+        // Enable/Disable TXT report (default: true)
+        txt.required.set(true)
+        txt.outputLocation.set(file("build/reports/detekt/detekt-result.txt"))
+        // Enable/Disable SARIF report (default: false)
+        sarif.required.set(false)
+        sarif.outputLocation.set(file("build/reports/detekt.sarif"))
+        // Enable/Disable MD report (default: false)
+        md.required.set(false)
+        md.outputLocation.set(file("build/reports/detekt.md"))
+        custom {
+            // The simple class name of your custom report.
+            reportId = "CustomJsonReport"
+            outputLocation.set(file("build/reports/detekt.json"))
+        }
     }
+}
+
+dependencies {
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.21.0")
 }
